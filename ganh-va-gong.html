@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gánh&Gồng - Khi mạnh mẽ không còn là sự lựa chọn</title>
+    
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.0.93/build/spline-viewer.js"></script>
+
+    <style>
+        /* 1. KHAI BÁO FONT NỘI BỘ */
+        @font-face {
+            font-family: 'AuraFont';
+            src: url('IMFeGPrm29P.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-color: #6c292a;
+            --text-color: #fdf5e7;
+            --accent-color: #e0d5b4;
+            --text-muted: rgba(253, 245, 231, 0.7);
+            --main-font: 'AuraFont', serif;
+        }
+
+        /* 2. THIẾT LẬP TOÀN TRANG */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: var(--main-font) !important; 
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* --- HIỆU ỨNG FADE UP --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 5%; 
+            position: sticky;
+            top: 0;
+            background-color: rgba(108, 41, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(253, 245, 231, 0.1);
+        }
+
+        .nav-logo { height: 105px; width: auto; object-fit: contain; transition: 0.4s; }
+
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1.5px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* NỘI DUNG BÀI VIẾT */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 5%;
+        }
+
+        .post-title {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            line-height: 1.2;
+            font-weight: 400;
+        }
+
+        .post-content {
+            font-size: 1.25rem;
+        }
+
+        .post-content p {
+            margin-bottom: 2rem;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .intro-text {
+            font-size: 1.4rem;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem !important;
+        }
+
+        .spline-container {
+            width: 100%;
+            height: 600px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 4rem 0;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .byline {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(253, 245, 231, 0.1);
+            text-align: right;
+            font-style: italic;
+            color: var(--accent-color);
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 4rem; 
+            opacity: 0.5; 
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .post-title { font-size: 2.5rem; }
+            .spline-container { height: 400px; }
+            .container { padding: 3rem 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="./index.html"><img src="./logo.png" alt="Aura Logo" class="nav-logo"></a>
+        <div class="nav-links fade-up">
+            <a href="./index.html">Trang Chủ</a>
+            <a href="./posts.html">Bài viết</a>
+            <a href="./about.html">Về Chúng Tôi</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="post-title fade-up">Gánh&Gồng - Khi mạnh mẽ không còn là sự lựa chọn</h1>
+
+        <div class="post-content">
+            <p class="intro-text fade-up">
+                <strong><em>“Phụ nữ bây giờ thật giỏi, đảm đang, làm được tất cả”</em></strong>... Những lời khen ấy xuất hiện mỗi ngày như một cách tôn vinh hình ảnh người phụ nữ hiện đại. Nhưng đằng sau sự công nhận tưởng chừng đầy tự hào ấy, liệu “đa nhiệm” có đơn thuần là năng lực, hay đang dần trở thành một áp lực vô hình?
+            </p>
+
+            <p class="fade-up">
+                Từ đó, “đa nhiệm” không còn là một lựa chọn mà trở thành một trạng thái kéo dài, một guồng quay nơi người phụ nữ liên tục dịch chuyển giữa các vai trò, tự cân bằng mọi thứ và dần quen với việc không có khoảng trống cho riêng mình. 
+                Để làm rõ sự giằng co ấy, mô hình 3D của Gánh&Gồng tái hiện một không gian bị tách đôi ngay trong cùng một căn phòng. Công việc và gia đình không còn là hai thế giới riêng biệt mà tồn tại song song, chồng lấn và không ngừng chen vào nhau. 
+                Ở trung tâm, người phụ nữ như bị kéo về hai phía, hiện diện ở cả hai nhưng lại không thực sự thuộc về nơi nào. Không gian này không chỉ dừng lại ở một hình ảnh tĩnh mà được phát triển thành trải nghiệm 3D trực quan, nơi người xem có thể bước vào và cảm nhận rõ hơn sự chồng lấn ấy.
+            </p>
+
+            <div class="spline-container fade-up">
+                <spline-viewer url="https://prod.spline.design/fxBAS5xAkTz3uPwQ/scene.splinecode"></spline-viewer>
+            </div>
+
+            <p class="fade-up">
+                Đó không chỉ là sự phân chia của không gian mà còn là sự phân tán của thời gian, năng lượng và cảm xúc. Một con người nhưng phải liên tục chuyển mình giữa nhiều vai trò, đến mức đôi khi điều mệt mỏi nhất không phải là làm quá nhiều mà là không thể dừng lại.
+            </p>
+            
+            <p class="fade-up">
+                Thông qua cách thể hiện này, Gánh&Gồng không chỉ đặt câu hỏi về “đa nhiệm” mà đi sâu hơn vào cảm giác bị nén lại bên trong: chúng ta đang nhìn thấy sự mạnh mẽ, hay đang bỏ qua sự kiệt sức đã trở nên quá quen thuộc?
+            </p>
+
+            <p class="fade-up">
+                Có lẽ vấn đề không nằm ở việc phụ nữ có thể làm được bao nhiêu, mà là họ đã phải chịu đựng bao nhiêu trong im lặng. Hãy để “Gánh” là điều họ có thể lựa chọn, và “Gồng” không còn là trạng thái họ buộc phải duy trì.
+            </p>
+
+            <p class="fade-up">
+                <em>Còn bạn, bạn nghĩ sao về ranh giới giữa “Gánh” và “Gồng”?</em>
+            </p>
+
+            <div class="byline fade-up">
+                Thực hiện bởi Anh Thư & Minh Châu
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const fadeElements = document.querySelectorAll('.fade-up');
+            fadeElements.forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body>
+</html>

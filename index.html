@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gánh&Gồng - Coming Soon</title>
+    <title>Gánh&Gồng</title>
     
     <style>
         /* 1. KHAI BÁO FONT NỘI BỘ */
@@ -20,6 +20,7 @@
             --text-color: #fdf5e7;
             --text-muted: rgba(253, 245, 231, 0.8);
             --accent-color: #e0d5b4;
+            --path-color: rgba(253, 245, 231, 0.15);
             --main-font: 'AuraFont', serif;
         }
 
@@ -39,9 +40,41 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        }
+
+        h2, h3 { font-weight: 400; }
+
+        /* --- HIỆU ỨNG FADE UP KHI CUỘN --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Animations cho vòng lặp --- */
+        @keyframes endlessGrind {
+            0%   { top: 0;   left: 50%;  transform: translate(-50%, -50%); }
+            25%  { top: 50%; left: 100%; transform: translate(-50%, -50%); }
+            50%  { top: 100%; left: 50%;  transform: translate(-50%, -50%); }
+            75%  { top: 50%; left: 0%;   transform: translate(-50%, -50%); }
+            100% { top: 0;   left: 50%;  transform: translate(-50%, -50%); }
+        }
+
+        @keyframes infiniteScroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        @keyframes pulse { 
+            0% { opacity: 0.4; } 
+            50% { opacity: 1; } 
+            100% { opacity: 0.4; } 
         }
 
         /* --- Navigation --- */
@@ -58,9 +91,9 @@
             border-bottom: 1px solid rgba(253, 245, 231, 0.1);
         }
 
-        .nav-logo { height: 105px; width: auto; object-fit: contain; }
+        .nav-logo { height: 105px; width: auto; object-fit: contain; transition: 0.4s; }
 
-        .nav-links { display: flex; align-items: center; }
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
 
         .nav-links a {
             text-decoration: none;
@@ -87,146 +120,425 @@
         .nav-links a:hover::after { width: 100%; }
         .nav-links a:hover { color: var(--accent-color); }
 
-        /* --- Main Content --- */
-        main {
-            flex: 1;
+        /* --- Sections Layout --- */
+        section {
+            padding: 8rem 5%;
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; width: 100%; }
+        .section-title { font-size: 2.8rem; margin-bottom: 2.5rem; text-align: center; }
+
+        #home {
             text-align: center;
-            padding: 8rem 10%;
             background-image: linear-gradient(rgba(108, 41, 42, 0.8), rgba(108, 41, 42, 0.8)), url('./background.png'); 
             background-size: cover;
-            background-position: center;
-            min-height: 80vh;
+            min-height: calc(100vh - 100px);
         }
 
-        .hero-logo { max-width: 500px; width: 100%; margin-bottom: 2rem; }
+        .hero-logo { max-width: 700px; width: 100%; margin: 0 auto 2.5rem auto; display: block; }
         
-        .intro-text { 
-            font-size: 1.1rem; 
+        #home p { 
+            font-size: 1.25rem; 
             color: var(--text-muted); 
-            max-width: 700px; 
-            margin-bottom: 4rem;
+            max-width: 800px; 
+            margin: 0 auto; 
+            text-align: center; 
         }
 
-        /* --- Countdown Styles --- */
-        .coming-soon-label {
-            font-size: 1.5rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
+        /* --- INFOGRAPHIC LOOP --- */
+        #grind-loop {
+            background-color: rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 18rem;
+        }
+
+        .grind-container {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            aspect-ratio: 1 / 1;
+            margin: 8rem auto 0 auto; 
+        }
+
+        .path-circle {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px dashed var(--path-color);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .grind-dot {
+            position: absolute;
+            width: 12px; height: 12px;
+            background-color: var(--text-color);
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 0 12px var(--accent-color);
+            animation: endlessGrind 18s linear infinite;
+        }
+
+        .grind-node {
+            position: absolute;
+            width: 85px; height: 85px;
+            border: 1px solid var(--path-color);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; z-index: 5; background: var(--bg-color);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translate(-50%, -50%); 
+        }
+
+        .grind-node:hover {
+            border-color: var(--accent-color);
+            transform: translate(-50%, -65%) scale(1.18); 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 15px rgba(224, 213, 180, 0.2);
+            background-color: rgba(108, 41, 42, 1);
+        }
+
+        .node-icon svg { width: 34px; height: 34px; stroke: var(--accent-color); stroke-width: 1.2; transition: 0.3s; }
+        .grind-node:hover .node-icon svg { stroke: var(--text-color); transform: rotate(-8deg); }
+
+        .node-top { top: 0; left: 50%; }
+        .node-right { top: 50%; left: 100%; }
+        .node-bottom { top: 100%; left: 50%; }
+        .node-left { top: 50%; left: 0; }
+
+        .node-desc {
+            position: absolute;
+            font-size: 0.9rem;
             color: var(--accent-color);
-            margin-bottom: 1.5rem;
+            width: 220px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.4s ease;
+            pointer-events: none;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        #countdown {
-            display: flex;
-            gap: 2.5rem;
-            margin-top: 1rem;
+        .grind-node:hover + .node-desc { opacity: 1; visibility: visible; }
+
+        /* Code nguyên bản cho laptop - KHÔNG THAY ĐỔI */
+        .desc-top    { top: -6.5rem; left: 50%; transform: translateX(-50%); }
+        .desc-right  { top: 50%; left: calc(100% + 145px); transform: translate(-50%, -50%); }
+        .desc-bottom { bottom: -6.5rem; left: 50%; transform: translateX(-50%); }
+        .desc-left   { top: 50%; left: -145px; transform: translate(-50%, -50%); }
+
+        /* --- MÃ SỬA LỖI CHỈ DÀNH CHO MOBILE --- */
+        /* Đẩy chữ vào vùng trống BÊN TRONG vòng tròn để tránh đè icon và tránh tràn viền */
+        @media (max-width: 768px) {
+            .node-desc { 
+                width: 120px; 
+                font-size: 0.8rem;
+            }
+            .desc-top { 
+                top: 4.5rem; 
+                left: 50%; 
+                transform: translateX(-50%); 
+            }
+            .desc-right { 
+                top: 50%; 
+                left: auto; 
+                right: 4.5rem; 
+                transform: translateY(-50%); 
+                text-align: right; 
+            }
+            .desc-bottom { 
+                bottom: 4.5rem; 
+                top: auto;
+                left: 50%; 
+                transform: translateX(-50%); 
+            }
+            .desc-left { 
+                top: 50%; 
+                left: 4.5rem; 
+                transform: translateY(-50%); 
+                text-align: left; 
+            }
         }
 
-        .time-segment {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* --- Flip Cards --- */
+        #interactive-game { padding-bottom: 10rem; }
+        .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem; }
+        .flip-container { perspective: 1000px; height: 320px; cursor: pointer; }
+        .flip-card { width: 100%; height: 100%; position: relative; transition: 0.8s; transform-style: preserve-3d; }
+        .flip-card.flipped { transform: rotateY(180deg); }
+        .flip-front, .flip-back {
+            width: 100%; height: 100%; position: absolute; backface-visibility: hidden;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 2.5rem; border-radius: 15px; border: 1px solid rgba(253, 245, 231, 0.2);
         }
+        .flip-front { background-color: rgba(253, 245, 231, 0.03); text-align: center; }
+        .flip-back { background-color: var(--text-color); color: var(--bg-color); transform: rotateY(180deg); text-align: justify; }
 
-        .time-value {
-            font-size: 4rem;
-            line-height: 1;
-            color: var(--text-color);
-        }
-
-        .time-label {
-            font-size: 0.85rem;
+        .click-hint {
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--accent-color);
-            margin-top: 0.5rem;
+            margin-top: 2rem;
+            animation: pulse 2s infinite;
         }
 
-        footer { 
-            text-align: center; 
-            padding: 5rem 2rem; 
+        /* --- LATEST POST --- */
+        #latest-post {
+            background-color: rgba(253, 245, 231, 0.02);
             border-top: 1px solid rgba(253, 245, 231, 0.05);
-            opacity: 0.7; 
-            font-size: 0.9rem; 
+            padding-bottom: 8rem;
         }
 
-        @media (max-width: 600px) {
-            .time-value { font-size: 2.5rem; }
-            #countdown { gap: 1.5rem; }
-            .hero-logo { max-width: 300px; }
-            .nav-logo { height: 70px; }
+        .post-card {
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(253, 245, 231, 0.1);
+            border-radius: 15px;
+            padding: 3.5rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: var(--accent-color);
+        }
+
+        .post-card h3 {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .post-card p {
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .read-more-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--bg-color);
+            background-color: var(--accent-color);
+            padding: 1rem 3rem;
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .read-more-btn:hover {
+            background-color: var(--text-color);
+            box-shadow: 0 0 20px rgba(224, 213, 180, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* --- LIÊN HỆ --- */
+        .contact-content {
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .contact-item {
+            margin: 2rem 0;
+        }
+
+        .contact-item strong {
+            color: var(--accent-color);
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 0.8rem;
+        }
+        
+        .contact-item a:hover {
+            color: var(--accent-color) !important;
+        }
+
+        @media (max-width: 768px) {
+            .post-card {
+                padding: 2rem 1.5rem;
+            }
+            .post-card h3 {
+                font-size: 1.5rem;
+            }
+        }
+
+        footer { text-align: center; padding: 5rem 2rem; border-top: 1px solid rgba(253, 245, 231, 0.05); opacity: 0.7; font-size: 0.9rem; }
+        
+        .infinite-grind-text {
+            position: absolute; bottom: 1rem; left: 0; white-space: nowrap; font-size: 0.8rem;
+            color: rgba(253, 245, 231, 0.05); text-transform: uppercase;
+            letter-spacing: 5px; animation: infiniteScroll 40s linear infinite;
+        }
+        .infinite-grind-text span { padding-right: 5rem; }
     </style>
 </head>
 <body>
 
     <nav>
         <a href="./index.html"><img src="./logo.png" alt="Aura Logo" class="nav-logo"></a>
-        <div class="nav-links">
+        <div class="nav-links fade-up">
             <a href="./index.html">Trang Chủ</a>
+            <a href="./posts.html">Bài viết</a>
+            <a href="./about.html">Về Chúng Tôi</a>
         </div>
     </nav>
 
-    <main>
-        <img src="./logo.png" alt="Aura" class="hero-logo">
-        
-        <p class="intro-text">
-            Dự án truyền thông lan tỏa thông điệp về sự sẻ chia trách nhiệm gia đình thay vì áp lực “đa nhiệm” lên vai người phụ nữ, được thực hiện bởi nhóm sinh viên lớp Quan hệ quốc tế và Truyền thông toàn cầu K44, Học viện Báo chí và Tuyên truyền.
-        </p>
+    <section id="home">
+        <div class="container">
+            <img src="./logo.png" alt="Aura" class="hero-logo fade-up">
+            <p class="fade-up">Dự án truyền thông lan tỏa thông điệp về sự sẻ chia trách nhiệm gia đình thay vì áp lực “đa nhiệm” lên vai người phụ nữ, được thực hiện bởi nhóm sinh viên lớp Quan hệ quốc tế và Truyền thông toàn cầu K44, Học viện Báo chí và Tuyên truyền.</p>
+        </div>
+    </section>
 
-        <div class="coming-soon-label">Coming Soon</div>
-        
-        <div id="countdown">
-            <div class="time-segment">
-                <div class="time-value" id="days">00</div>
-                <div class="time-label">Ngày</div>
-            </div>
-            <div class="time-segment">
-                <div class="time-value" id="hours">00</div>
-                <div class="time-label">Giờ</div>
-            </div>
-            <div class="time-segment">
-                <div class="time-value" id="minutes">00</div>
-                <div class="time-label">Phút</div>
-            </div>
-            <div class="time-segment">
-                <div class="time-value" id="seconds">00</div>
-                <div class="time-label">Giây</div>
+    <section id="grind-loop">
+        <div class="infinite-grind-text">
+            <span>Workplace</span> <span>Tan Sở</span> <span>Home</span> <span>Sẵn Sàng</span>
+            <span>Workplace</span> <span>Tan Sở</span> <span>Home</span> <span>Sẵn Sàng</span>
+        </div>
+        <div class="container">
+            <h2 class="section-title fade-up">Vòng Lặp Không Ngừng</h2>
+            <div class="grind-container fade-up">
+                <div class="grind-dot"></div>
+                <div class="path-circle"></div>
+
+                <div class="grind-node node-top">
+                    <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="16" y1="6" x2="16" y2="6.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="16" y1="10" x2="16" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="16" y1="14" x2="16" y2="14.01"/><line x1="10" y1="22" x2="14" y2="22"/></svg></span>
+                </div>
+                <div class="node-desc desc-top">NƠI LÀM VIỆC (Ca làm thứ nhất)<br>Gánh nặng kỳ vọng và áp lực nghề nghiệp.</div>
+
+                <div class="grind-node node-right">
+                    <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="m4 10h16"/><path d="M8 20h.01"/><path d="M16 20h.01"/><path d="m6 16v2"/><path d="m18 16v2"/></svg></span>
+                </div>
+                <div class="node-desc desc-right">TAN SỞ & CHỐN GIỮA<br>Chuyển giao vai trò, tranh thủ đi chợ.</div>
+
+                <div class="grind-node node-bottom">
+                    <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+                </div>
+                <div class="node-desc desc-bottom">NHÀ (Ca làm thứ hai)<br>Nơi làm việc thứ hai: gia đình và việc nhà.</div>
+
+                <div class="grind-node node-left">
+                    <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg></span>
+                </div>
+                <div class="node-desc desc-left">SẴN SÀNG & Reset<br>Chuẩn bị cho ngày “grind” tiếp theo.</div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <footer>
-        <p>&copy; 2026 Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
+    <section id="interactive-game">
+        <div class="container">
+            <h2 class="section-title fade-up">Lật Mở Định Kiến</h2>
+            <div class="flip-grid">
+                <div class="flip-container fade-up" onclick="this.querySelector('.flip-card').classList.toggle('flipped')">
+                    <div class="flip-card">
+                        <div class="flip-front">
+                            <h3>“Phụ nữ bẩm sinh đã giỏi việc nhà”</h3>
+                            <span class="click-hint">Nhấn để lật ⟳</span>
+                        </div>
+                        <div class="flip-back">
+                            <p>Sự thật: Kỹ năng chăm sóc được học hỏi, không phải bẩm sinh. Gắn mác “thiên chức” là cách vô hình đẩy trách nhiệm lên vai người vợ.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-container fade-up" onclick="this.querySelector('.flip-card').classList.toggle('flipped')">
+                    <div class="flip-card">
+                        <div class="flip-front">
+                            <h3>“Phụ nữ sinh ra để đa nhiệm”</h3>
+                            <span class="click-hint">Nhấn để lật ⟳</span>
+                        </div>
+                        <div class="flip-back">
+                            <p>Sự thật: Ép buộc “đa nhiệm” liên tục chỉ dẫn đến kiệt sức và tổn thương sức khỏe tinh thần. Trách nhiệm gia đình cần được sẻ chia.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-container fade-up" onclick="this.querySelector('.flip-card').classList.toggle('flipped')">
+                    <div class="flip-card">
+                        <div class="flip-front">
+                            <h3>“Việc nhà đâu tốn mấy thời gian”</h3>
+                            <span class="click-hint">Nhấn để lật ⟳</span>
+                        </div>
+                        <div class="flip-back">
+                            <p>Sự thật: Theo thống kê, phụ nữ dành trung bình tới 5 giờ mỗi ngày cho các công việc lao động chăm sóc không được trả lương.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="latest-post">
+        <div class="container">
+            <h2 class="section-title fade-up">Bài Viết Mới Nhất</h2>
+            <div class="post-card fade-up">
+                <h3>Gánh&Gồng - Khi mạnh mẽ không còn là sự lựa chọn</h3>
+                <p>Khám phá sự giằng xé giữa hai thế giới của người phụ nữ hiện đại qua mô hình không gian 3D tương tác. Một trải nghiệm thị giác về gánh nặng vô hình và sự đa nhiệm không hồi kết.</p>
+                <a href="./ganh-va-gong.html" class="read-more-btn">Đọc Thêm</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact-info">
+        <div class="container fade-up"> 
+            <h2 class="section-title fade-up">Liên Hệ Với Chúng Tôi</h2>
+            <div class="contact-content fade-up">
+                <p>Chúng tôi luôn lắng nghe những câu chuyện và góc nhìn từ bạn. Hãy kết nối với dự án qua các thông tin dưới đây:</p>
+                
+                <div class="contact-item">
+                    <strong>Đơn vị chủ quản</strong>
+                    <p>Lớp Quan hệ quốc tế và Truyền thông toàn cầu K44<br>Học viện Báo chí và Tuyên truyền</p>
+                </div>
+
+                <div class="contact-item">
+                    <strong>Email</strong>
+                    <p><a href="mailto:ganh.n.gong@gmail.com" style="color: var(--text-color); text-decoration: underline; text-underline-offset: 4px; transition: 0.3s;">ganh.n.gong@gmail.com</a></p>
+                </div>
+
+                <div class="contact-item">
+                    <strong>Điện thoại</strong>
+                     <p><a href="tel:091 905 84 41" style="color: var(--text-color); text-decoration: underline; transition: 0.3s;">091 905 84 41 (Nguyễn Minh Hồng)</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="fade-up">
+        <p>Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
     </footer>
 
     <script>
-        // Thời điểm đích: 20:00 ngày 26 tháng 4 năm 2026
-        const targetDate = new Date("April 26, 2026 11:30:00").getTime();
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 
+            };
 
-        const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerText = days.toString().padStart(2, '0');
-            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
-
-            if (distance < 0) {
-                clearInterval(timer);
-                document.getElementById("countdown").innerHTML = "<h3>DỰ ÁN ĐÃ RA MẮT</h3>";
-            }
-        }, 1000);
+            const fadeElements = document.querySelectorAll('.fade-up');
+            fadeElements.forEach(el => observer.observe(el));
+        });
     </script>
 </body>
 </html>

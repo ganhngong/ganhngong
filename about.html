@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gánh&Gồng - Về Chúng Tôi</title>
+    
+    <style>
+        /* --- COPY Y NGUYÊN TỪ INDEX.HTML --- */
+        /* 1. KHAI BÁO FONT NỘI BỘ */
+        @font-face {
+            font-family: 'AuraFont';
+            src: url('IMFeGPrm29P.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-color: #6c292a;
+            --text-color: #fdf5e7;
+            --text-muted: rgba(253, 245, 231, 0.8);
+            --accent-color: #e0d5b4;
+            --path-color: rgba(253, 245, 231, 0.15);
+            --main-font: 'AuraFont', serif;
+        }
+
+        /* 2. THIẾT LẬP TOÀN TRANG */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--main-font) !important;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        h2, h3 { font-weight: 400; }
+
+        /* --- HIỆU ỨNG FADE UP KHI CUỘN --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 5%; 
+            position: sticky;
+            top: 0;
+            background-color: rgba(108, 41, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(253, 245, 231, 0.1);
+        }
+
+        .nav-logo { height: 105px; width: auto; object-fit: contain; transition: 0.4s; }
+
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1.5px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* --- Sections Layout --- */
+        section {
+            padding: 8rem 5%;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; width: 100%; }
+        .section-title { font-size: 2.8rem; margin-bottom: 2.5rem; text-align: center; }
+
+        /* --- CSS DÀNH RIÊNG CHO ABOUT.HTML (Không thay đổi) --- */
+        .about-content {
+            text-align: justify;
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: var(--text-color);
+        }
+
+        #team-members {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+        }
+
+        .team-member {
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(253, 245, 231, 0.1);
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+        }
+
+        .member-photo {
+            width: 150px; 
+            height: 150px;
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 2px solid rgba(253, 245, 231, 0.1);
+            margin-bottom: 1.5rem;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        .member-name {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        .member-desc {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            font-style: italic;
+        }
+
+        .contact-content {
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .contact-item {
+            margin: 2rem 0;
+        }
+
+        .contact-item strong {
+            color: var(--accent-color);
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 0.8rem;
+        }
+
+        footer { text-align: center; padding: 5rem 2rem; border-top: 1px solid rgba(253, 245, 231, 0.05); opacity: 0.7; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="./index.html"><img src="./logo.png" alt="Aura Logo" class="nav-logo"></a>
+        <div class="nav-links fade-up">
+            <a href="./index.html">Trang Chủ</a>
+            <a href="./about.html">Về Chúng Tôi</a>
+            <a href="./posts.html">Bài viết</a>
+        </div>
+    </nav>
+
+    <section id="general-intro">
+        <div class="container"> 
+            <h2 class="section-title fade-up">Về Dự Án Gánh&Gồng</h2>
+            <div class="about-content fade-up">
+                <p>"Gánh" và "Gồng" – hai động từ bình dị nhưng lại là bản tóm tắt chân thực nhất cho cuộc sống của người phụ nữ hiện đại: Multitasking (Đa nhiệm) đi đôi với Multi-tiring (Đa mệt mỏi).</p>
+                <br>
+                <p>Hình ảnh chiếc đòn gánh là hiện thân của sự kiên cường, nơi sức nặng của định kiến và kỳ vọng được chuyển hóa thành nhịp bước nhẫn nại của người phụ nữ. Khi đồng hành cùng GÁNH&GỒNG, hình ảnh chiếc đòn gánh khắc họa bức tranh về cuộc chiến thầm lặng giữa việc 'gánh' kỳ vọng xã hội và 'gồng' mình lên để chống đỡ những áp lực ấy của người phụ nữ.</p>
+                <br>
+                <p>Chúng mình quyết định lựa chọn diện mạo này làm linh hồn cho dự án, để bắt đầu hành trình thấu hiểu và sẻ chia những "gánh nặng" vô hình ấy. Hãy cùng theo dõi các sản phẩm truyền thông đa phương tiện với chúng mình nhé!</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="team-members">
+        <div class="container"> 
+            <h2 class="section-title fade-up">Đội Ngũ Thực Hiện</h2>
+            <div class="team-grid">
+                <div class="team-member fade-up"> 
+                    <img src="Hồng.jpg" alt="Ảnh Minh Hồng" class="member-photo"> 
+                    <h3 class="member-name">Nguyễn Minh Hồng</h3>
+                    <p class="member-role">Trưởng dự án</p>
+                    <p class="member-desc">“Life doesn’t get easier, you just get stronger.”</p>
+                </div>
+                <div class="team-member fade-up">
+                    <img src="châu.jpg" alt="Ảnh Minh Châu" class="member-photo"> 
+                    <h3 class="member-name">Nguyễn Ngọc Minh Châu</h3>
+                    <p class="member-role">Thiết kế</p>
+                    <p class="member-desc">Mình dành tặng dự án này cho mẹ mình.</p>
+                </div>
+                <div class="team-member fade-up">
+                    <img src="QuỳnhAnh.jpg" alt="Bùi Phạm Quỳnh Anh" class="member-photo"> 
+                    <h3 class="member-name">Bùi Phạm Quỳnh Anh</h3> 
+                    <p class="member-role">Nội dung & Thiết kế</p>
+                    <p class="member-desc">“Dreaming a big big dream 💫” Khi cuộc đời ném xuống một dự án, Quỳnh Anh xách laptop lên và lên ý tưởng, viết nội dung, design ảnh, edit video, dán cao salonpas.</p>
+                </div>
+                <div class="team-member fade-up">
+                    <img src="VũThùyDương.jpg" alt="Vũ Thuỳ Dương" class="member-photo">
+                    <h3 class="member-name">Vũ Thuỳ Dương</h3>
+                    <p class="member-role">Thực nghiệm xã hội & Video</p>
+                    <p class="member-desc">Vũ Thùy Dương đây nha, mang thực nghiệm xã hội đến thật gần chúng ta!</p>
+                </div>
+                <div class="team-member fade-up">
+                    <img src="nhi.jpg" alt="Lương Trang Nhi" class="member-photo">
+                    <h3 class="member-name">Lương Trang Nhi</h3>
+                    <p class="member-role">Nội dung</p>
+                    <p class="member-desc">Là một người yêu tất cả phụ nữ, mình muốn lan tỏa đến mọi người là việc nhà là trách nhiệm và nghĩa vụ của tất cả mọi người.</p>
+                </div>
+                <div class="team-member fade-up">
+                    <img src="Thư.png" alt="Phạm Anh Thư" class="member-photo">
+                    <h3 class="member-name">Phạm Anh Thư</h3>
+                    <p class="member-role">Nội dung & Video AI</p>
+                    <p class="member-desc">"The best stories are felt, not just told."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact-info">
+        <div class="container"> 
+            <h2 class="section-title fade-up">Liên Hệ Với Chúng Tôi</h2>
+            <div class="contact-content fade-up">
+                <p>Chúng tôi luôn lắng nghe những câu chuyện và góc nhìn từ bạn. Hãy kết nối với dự án qua các thông tin dưới đây:</p>
+                
+                <div class="contact-item">
+                    <strong>Đơn vị chủ quản</strong>
+                    <p>Lớp Quan hệ quốc tế và Truyền thông toàn cầu K44<br>Học viện Báo chí và Tuyên truyền</p>
+                </div>
+
+                <div class="contact-item">
+                    <strong>Email</strong>
+                    <p><a href="mailto:ganh.n.gong@gmail.com" style="color: var(--text-color); text-decoration: underline; transition: 0.3s;">ganh.n.gong@gmail.com</a></p>
+                </div>
+
+                <div class="contact-item">
+                    <strong>Điện thoại</strong>
+                    <p><a href="tel:091 905 84 41" style="color: var(--text-color); text-decoration: underline; transition: 0.3s;">091 905 84 41 (Nguyễn Minh Hồng)</a></p>
+                </div>
+
+                <div class="contact-item">
+                    <strong>Địa chỉ</strong>
+                    <p>36 Xuân Thủy, Dịch Vọng Hậu, Cầu Giấy, Hà Nội</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="fade-up">
+        <p>Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            const fadeElements = document.querySelectorAll('.fade-up');
+            fadeElements.forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body>
+</html>
