@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gánh&Gồng - “Đặc quyền” hay “Định kiến”?</title>
+    
+    <!-- Tải D3.js, TopoJSON và Lucide Icons -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson-client@3"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* 1. KHAI BÁO FONT NỘI BỘ */
+        @font-face {
+            font-family: 'AuraFont';
+            src: url('IMFeGPrm29P.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-color: #6c292a;
+            --text-color: #fdf5e7;
+            --accent-color: #e0d5b4;
+            --text-muted: rgba(253, 245, 231, 0.7);
+            --main-font: 'AuraFont', serif;
+        }
+
+        /* 2. THIẾT LẬP TOÀN TRANG */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: var(--main-font) !important; 
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* --- HIỆU ỨNG FADE UP --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 5%; 
+            position: sticky;
+            top: 0;
+            background-color: rgba(108, 41, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(253, 245, 231, 0.1);
+        }
+
+        .nav-logo { height: 105px; width: auto; object-fit: contain; transition: 0.4s; }
+
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1.5px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* NỘI DUNG BÀI VIẾT */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 5%;
+        }
+
+        .post-title {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            line-height: 1.2;
+            font-weight: 400;
+        }
+
+        .post-content {
+            font-size: 1.25rem;
+        }
+
+        .post-content p {
+            margin-bottom: 2rem;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .intro-text {
+            font-size: 1.4rem;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem !important;
+        }
+
+        .byline {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(253, 245, 231, 0.1);
+            text-align: right;
+            font-style: italic;
+            color: var(--accent-color);
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 4rem; 
+            opacity: 0.5; 
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* =========================================
+           STYLES DÀNH CHO BẢN ĐỒ VÀ INFO CARD
+           ========================================= */
+        #map-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background-color: #f8fafc;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            margin: 4rem 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        #map-svg {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+        #map-svg:active {
+            cursor: grabbing;
+        }
+
+        .region-path {
+            transition: fill 0.2s ease;
+            cursor: pointer;
+        }
+        
+        #loading-screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 50;
+        }
+
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+            color: #94a3b8;
+            width: 40px; height: 40px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .map-overlay-top {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 10;
+            pointer-events: none;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 0.75rem 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        .map-overlay-bottom {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            font-size: 10px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* --- INFO CARD --- */
+        #region-card {
+            position: absolute;
+            top: 0;
+            right: -100%;
+            height: 100%;
+            width: 100%;
+            max-width: 450px;
+            background-color: #f2edd8;
+            border-left: 1px solid rgba(108, 41, 42, 0.2);
+            box-shadow: -20px 0 25px -5px rgba(0,0,0,0.2);
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        #region-card.open {
+            right: 0;
+        }
+
+        .card-header {
+            position: relative;
+            height: 12rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card-header-bg-solid {
+            position: absolute; inset: 0;
+            background-color: #6c292a; opacity: 0.1;
+        }
+        .card-header-bg-gradient {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, transparent, #f2edd8);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: #f2edd8;
+            border: 1px solid rgba(108, 41, 42, 0.2);
+            cursor: pointer;
+            z-index: 10;
+            transition: 0.2s;
+        }
+        .close-btn:hover { background: rgba(0,0,0,0.05); }
+
+        .card-globe-icon {
+            width: 5rem; height: 5rem;
+            margin: 0 auto 1rem auto;
+            border-radius: 1.5rem;
+            display: flex; align-items: center; justify-content: center;
+            background-color: #6c292a;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            transform: rotate(3deg);
+        }
+
+        .card-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 2rem 3rem 2rem;
+        }
+
+        .stat-box {
+            padding: 1rem;
+            border-radius: 1rem;
+            background: rgba(108, 41, 42, 0.05);
+            border: 1px solid rgba(108, 41, 42, 0.1);
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-box {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            background: #f2edd8;
+            border: 1px solid rgba(108, 41, 42, 0.1);
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+        }
+        .detail-box:hover {
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .card-footer {
+            padding: 2rem;
+            border-top: 1px solid rgba(108, 41, 42, 0.1);
+            background-color: rgba(108, 41, 42, 0.03);
+        }
+
+        .explore-btn {
+            width: 100%; padding: 1rem; border-radius: 1rem;
+            background-color: #6c292a; color: white;
+            font-weight: bold; display: flex; align-items: center; justify-content: center;
+            gap: 0.5rem; border: none; cursor: pointer;
+            box-shadow: 0 20px 25px -5px rgba(108, 41, 42, 0.3);
+            transition: transform 0.1s;
+        }
+        .explore-btn:active { transform: scale(0.98); }
+
+        @media (max-width: 768px) {
+            .post-title { font-size: 2.5rem; }
+            #map-container { height: 450px; }
+            .container { padding: 3rem 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="./index.html"><img src="./logo.png" alt="Aura Logo" class="nav-logo"></a>
+        <div class="nav-links fade-up">
+            <a href="./index.html">Trang Chủ</a>
+            <a href="./posts.html">Bài viết</a>
+            <a href="./about.html">Về Chúng Tôi</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="post-title fade-up">“Đặc quyền” hay “định kiến”? – Khám phá qua Interactive Map</h1>
+
+        <div class="post-content">
+            <p class="intro-text fade-up">
+                Trong nhiều bối cảnh xã hội, phụ nữ thường được gán cho những “đặc quyền” nghe có vẻ tích cực: được chăm sóc gia đình, được “giữ lửa” hạnh phúc, được làm hậu phương vững chắc. Tuy nhiên, khi nhìn sâu hơn, những “đặc quyền” này lại mang một ý nghĩa hoàn toàn khác. Chúng không đơn thuần là quyền lợi, mà thực chất là những kỳ vọng xã hội được khoác lên lớp vỏ mỹ miều, khiến phụ nữ phải gánh vác nhiều vai trò cùng lúc mà không được lựa chọn.
+            </p>
+
+             <p class="fade-up">
+                Chủ đề “Gánh&Gồng” gợi lên hình ảnh người phụ nữ lặng lẽ mang trên vai cả công việc xã hội lẫn trách nhiệm gia đình – không chỉ là “gánh” mà còn là “gồng” để chịu đựng kỳ vọng và áp lực vô hình.  Từ đó, chúng mình đã tự đặt ra một câu hỏi phản biện: Multitasking hay Multi-tiring? Liệu việc được ca ngợi là “đa nhiệm” có thực sự là năng lực đáng tự hào, hay chỉ là một cách gọi mỹ miều cho sự “đa-mệt-mỏi”? Khái niệm “gánh nặng hai vai” – vừa tham gia lao động xã hội, vừa đảm nhận trách nhiệm gia đình – từ lâu đã được nhắc đến như một thực trạng phổ biến. Nhưng trong bài truyền thông này, vấn đề được tiếp cận dưới một góc nhìn khác: khi gánh nặng ấy được gọi tên là “đặc quyền”, nó vô tình trở thành một dạng định kiến mới, tinh vi hơn và khó nhận diện hơn. Phụ nữ không chỉ phải làm nhiều hơn, mà còn được kỳ vọng phải cảm thấy “may mắn” vì được trao cơ hội làm tất cả.
+            </p>
+
+            <p class="fade-up">
+                Để thể hiện rõ sự khác biệt văn hóa nhưng đồng thời cũng cho thấy tính phổ quát của vấn đề, sản phẩm truyền thông sử dụng hình thức bản đồ tương tác (Interactive Map). Trên nền bản đồ thế giới, mỗi quốc gia hoặc khu vực sẽ được gắn với một “đặc quyền” cụ thể mà phụ nữ tại đó thường phải gánh vác. Ví dụ, ở một số nơi, phụ nữ được coi là “đặc quyền” khi hy sinh sự nghiệp để chăm sóc gia đình; ở nơi khác, họ có “đặc quyền” vừa làm việc toàn thời gian vừa đảm nhận toàn bộ công việc nội trợ. Việc tương tác trực tiếp bằng cách nhấn vào từng khu vực giúp người xem không chỉ quan sát, mà còn chủ động khám phá và nhận ra rằng những “đặc quyền” này thực chất là những áp lực mang tính hệ thống.
+            </p>
+
+            <!-- KHU VỰC BẢN ĐỒ TƯƠNG TÁC -->
+            <div id="map-container" class="fade-up">
+                <div id="loading-screen">
+                    <i data-lucide="loader-2" class="loading-spinner"></i>
+                    <p style="color: #64748b; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; margin: 0;">Đang khởi tạo bản đồ...</p>
+                </div>
+                
+                <div class="map-overlay-top">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i data-lucide="globe" style="color: #6366f1; width: 20px; height: 20px;"></i>
+                        <h1 style="margin:0; font-size: 1.25rem; font-weight: 900; color: #0f172a; letter-spacing: -0.025em;">Bản đồ Thế giới Tương tác</h1>
+                    </div>
+                    <p style="margin:0; font-size: 10px; text-transform: uppercase; color: #94a3b8; font-weight: bold; letter-spacing: 0.1em; margin-top: 4px;">Chọn một khu vực để khám phá</p>
+                </div>
+
+                <svg id="map-svg"></svg>
+
+                <div class="map-overlay-bottom">
+                    <i data-lucide="info" style="width: 12px; height: 12px;"></i> Sử dụng cuộn để phóng to • Kéo để di chuyển
+                </div>
+
+                <!-- Bảng thông tin khu vực (Region Card) -->
+                <div id="region-card">
+                    <div class="card-header">
+                        <div class="card-header-bg-solid"></div>
+                        <div class="card-header-bg-gradient"></div>
+                        
+                        <button class="close-btn" onclick="closeCard()">
+                            <i data-lucide="x" style="color: #6c292a; width: 20px; height: 20px;"></i>
+                        </button>
+                        
+                        <div style="position: relative; z-index: 10; text-align: center;">
+                            <div class="card-globe-icon">
+                                <i data-lucide="globe-2" style="color: #f2edd8; width: 40px; height: 40px;"></i>
+                            </div>
+                            <h2 id="card-title" style="font-size: 1.875rem; font-weight: 900; color: #6c292a; margin: 0; letter-spacing: -0.025em;">Tiêu đề</h2>
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <p id="card-desc" style="font-size: 1.125rem; font-weight: 500; color: #6c292a; opacity: 0.8; line-height: 1.625; margin-bottom: 2rem;"></p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;" id="card-stats">
+                            <!-- JS sẽ điền thông số vào đây -->
+                        </div>
+
+                        <h3 style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 900; color: #6c292a; opacity: 0.6; margin-bottom: 1rem;">
+                            <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i> Điểm nổi bật của khu vực
+                        </h3>
+                        <div id="card-details">
+                            <!-- JS sẽ điền chi tiết vào đây -->
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="explore-btn" onclick="closeCard()">
+                            Khám phá thêm các khu vực <i data-lucide="chevron-right" style="width: 20px; height: 20px;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- KẾT THÚC KHU VỰC BẢN ĐỒ -->
+
+            <p class="fade-up">
+                Thông qua cách tiếp cận trực quan và có tính tương tác cao, bài truyền thông đặt ra một câu hỏi mang tính phản biện: liệu chúng ta đang trao quyền cho phụ nữ, hay đang gán thêm trách nhiệm dưới danh nghĩa trao quyền? Khi một nghĩa vụ được gọi là “đặc quyền”, nó không chỉ làm giảm đi tính chất áp lực của vấn đề, mà còn khiến những người trong cuộc khó có thể lên tiếng, bởi bất kỳ sự từ chối nào cũng có thể bị nhìn nhận là thiếu trách nhiệm hoặc không biết trân trọng.
+
+            </p>
+
+            <p class="fade-up">
+                Bản đồ này không đưa ra câu trả lời sẵn. Nó buộc người xem phải tự nhìn nhận: chúng ta đang trao thêm cơ hội, hay đang hợp thức hóa áp lực?
+            </p>
+
+             <p class="fade-up">
+                 Tóm lại, việc tái định nghĩa những “đặc quyền” này là cần thiết để làm rõ bản chất của vấn đề. Không phải mọi điều được gọi là đặc quyền đều là quyền lợi thực sự; đôi khi, đó chỉ là một cách diễn đạt khác của định kiến đã tồn tại từ lâu trong xã hội. Khi phụ nữ được kỳ vọng phải làm tất cả, đó không còn là sự trao quyền, mà là sự áp đặt. Và chỉ khi nhận diện được điều này, xã hội mới có thể tiến tới việc phân chia trách nhiệm một cách công bằng và bền vững hơn.
+            </p>
+
+            <p class="fade-up">
+                Và có lẽ, bước đầu tiên để thay đổi chính là gọi đúng tên vấn đề.
+            </p>
+
+            <div class="byline fade-up">
+                Thực hiện bởi Anh Thư, Trang Nhi, và Minh Châu
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
+    </footer>
+
+    <!-- LOGIC BẢN ĐỒ TƯƠNG TÁC -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Khởi tạo Icon
+            lucide.createIcons();
+
+            // Hiệu ứng Fade-up
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        });
+
+        // Dữ liệu nội dung chi tiết theo từng khu vực
+        const REGIONS = {
+            east_asia: {
+                id: "east_asia",
+                name: "Đông Á",
+                description: "Vị thế của phụ nữ chịu ảnh hưởng sâu sắc từ tư tưởng Nho giáo, vốn đề cao vai trò truyền thống trong gia đình.",
+                details: ["Phụ nữ ngày nay đã tham gia mạnh mẽ vào giáo dục và thị trường lao động.", "Vẫn phải đối mặt với áp lực “hai vai” – vừa phát triển sự nghiệp, vừa hoàn thành trách nhiệm làm vợ, làm mẹ.", "Định kiến giới vẫn tồn tại, đặc biệt ở các khu vực nông thôn, khiến quyền tự quyết trong hôn nhân và tài sản của phụ nữ chưa thực sự được đảm bảo."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "650 Triệu" }, { label: "Tổng lao động nữ", value: "364 Triệu (56%)" }]
+            },
+            south_asia: {
+                id: "south_asia",
+                name: "Nam Á",
+                description: "Khu vực có mức độ bất bình đẳng giới rất cao, chịu ảnh hưởng nặng nề từ tôn giáo và các hủ tục lạc hậu.",
+                details: ["Nhiều bé gái bị hạn chế cơ hội học tập ngay từ nhỏ, dẫn đến tỷ lệ mù chữ và thất nghiệp cao ở phụ nữ.", "Các tập tục như của hồi môn và quan niệm danh dự gia đình khiến phụ nữ bị kiểm soát chặt chẽ và dễ trở thành nạn nhân của bạo lực.", "Theo khảo sát của TrustLaw, các quốc gia như Afghanistan, Pakistan và Ấn Độ nằm trong nhóm nguy hiểm nhất đối với phụ nữ."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "720 Triệu" }, { label: "Tổng lao động nữ", value: "201 Triệu (35%)" }]
+            },
+            west_asia: {
+                id: "west_asia",
+                name: "Tây Á",
+                description: "Ở nhiều quốc gia, phụ nữ vẫn bị hạn chế quyền tự do cá nhân do ảnh hưởng của hệ thống giám hộ nam và luật gia đình mang tính bất bình đẳng.",
+                details: ["Gặp khó khăn trong việc ra nước ngoài hoặc tham gia một số hoạt động pháp lý nếu không có sự cho phép của nam giới.", "Quyền ly hôn, nuôi con và thừa kế của phụ nữ còn hạn chế, khiến họ dễ rơi vào thế yếu trong gia đình.", "Các quy định về trang phục cũng tạo áp lực xã hội lớn, phản ánh sự kiểm soát đối với phụ nữ trong đời sống hàng ngày."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "115 Triệu" }, { label: "Tổng lao động nữ", value: "25 Triệu (22%)" }]
+            },
+            central_asia: {
+                id: "central_asia",
+                name: "Trung Á",
+                description: "Chịu ảnh hưởng từ cả di sản Xô viết và các giá trị truyền thống, tạo nên sự đan xen giữa tiến bộ và bất bình đẳng giới.",
+                details: ["Phụ nữ có cơ hội tiếp cận giáo dục và việc làm tốt hơn so với một số khu vực khác.", "Ở nông thôn, họ vẫn phải đối mặt với hôn nhân sớm, định kiến giới và thậm chí là các tập tục như “bắt cóc cô dâu”.", "Vai trò của phụ nữ trong chính trị và các quyết định xã hội vẫn còn hạn chế."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "30 Triệu" }, { label: "Tổng lao động nữ", value: "15 Triệu (50%)" }]
+            },
+            north_africa: {
+                id: "north_africa",
+                name: "Bắc Phi",
+                description: "Phụ nữ chịu ảnh hưởng mạnh từ luật Hồi giáo và các chuẩn mực văn hóa truyền thống.",
+                details: ["Mặc dù một số quốc gia đã có cải cách pháp luật, nhưng vẫn tồn tại sự bất bình đẳng trong hôn nhân, ly hôn và thừa kế.", "Phụ nữ gặp nhiều khó khăn trong việc tự chủ kinh tế và bảo vệ quyền lợi cá nhân, đặc biệt trong môi trường xã hội còn nặng tính gia trưởng."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "95 Triệu" }, { label: "Tổng lao động nữ", value: "18 Triệu (19%)" }]
+            },
+            central_africa: {
+                id: "central_africa",
+                name: "Trung Phi",
+                description: "Chịu ảnh hưởng nặng nề bởi xung đột, nghèo đói và bất ổn chính trị,",
+                details: ["Phụ nữ và trẻ em gái trở thành nhóm dễ bị tổn thương nhất.", "Thường bị hạn chế tiếp cận giáo dục, y tế và cơ hội việc làm, đồng thời đối mặt với nguy cơ cao bị bạo lực và khai thác.", "Bất bình đẳng giới tại đây gắn chặt với các vấn đề nhân đạo và phát triển."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "65 Triệu" }, { label: "Tổng lao động nữ", value: "42 Triệu (65%)" }]
+            },
+            southern_africa: {
+                id: "southern_africa",
+                name: "Nam Phi",
+                description: "Có những tiến bộ nhất định trong việc thúc đẩy quyền phụ nữ, nhưng vẫn tồn tại nhiều thách thức như bạo lực giới, kết hôn sớm và bất bình đẳng kinh tế.",
+                details: ["Một số cộng đồng vẫn duy trì các hủ tục lạc hậu như cắt bỏ bộ phận sinh dục nữ.", "Gây ảnh hưởng nghiêm trọng đến sức khỏe và quyền con người của phụ nữ, cho thấy khoảng cách giữa luật pháp và thực tế."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "25 Triệu" }, { label: "Tổng lao động nữ", value: "11 Triệu (46,0%)" }]
+            },
+            east_europe: {
+                id: "east_europe",
+                name: "Đông Âu",
+                description: "Phụ nữ có trình độ học vấn cao nhưng vẫn phải đối mặt với nhiều rào cản xã hội và văn hóa.",
+                details: ["Bạo lực gia đình là vấn đề đáng lo ngại ở một số quốc gia.", "Định kiến giới vẫn ảnh hưởng đến cơ hội nghề nghiệp và vị thế xã hội của phụ nữ.", "Sự khác biệt về chính sách giữa các nước khiến tình trạng bất bình đẳng diễn ra không đồng đều."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "125 Triệu" }, { label: "Tổng lao động nữ", value: "93 Triệu (55%)" }]
+            },
+            west_europe: {
+                id: "west_europe",
+                name: "Tây Âu",
+                description: "Khu vực có mức độ bình đẳng giới cao, nơi phụ nữ được tiếp cận giáo dục và cơ hội việc làm gần như ngang bằng với nam giới.",
+                details: ["Bất bình đẳng vẫn tồn tại dưới các hình thức tinh vi hơn như chênh lệch lương, hạn chế thăng tiến (“trần kính”) và áp lực cân bằng giữa công việc và gia đình.", "Điều này cho thấy bình đẳng giới chưa hoàn toàn đạt được."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "170 Triệu" }, { label: "Tổng lao động nữ", value: "65 Triệu (52%)" }]
+            },
+            north_america: {
+                id: "north_america",
+                name: "Bắc Mỹ",
+                description: "Phụ nữ đã đạt được nhiều tiến bộ trong giáo dục và việc làm.",
+                details: ["Vẫn phải đối mặt với những bất bình đẳng trong môi trường công sở, như chênh lệch thu nhập và hạn chế trong cơ hội thăng tiến.", "Hoa Kỳ hiện chưa có chính sách nghỉ thai sản có lương áp dụng trên toàn quốc", "Áp lực đáng kể cho phụ nữ trong việc cân bằng giữa công việc và gia đình."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "150 Triệu" }, { label: "Tổng lao động nữ", value: "85 Triệu (57%)" }]
+            },
+            south_america: {
+                id: "south_america",
+                name: "Nam Mỹ",
+                description: "Phụ nữ tham gia lao động ngày càng nhiều nhưng thường tập trung ở các công việc thu nhập thấp, khu vực phi chính thức và thiếu ổn định.",
+                details: ["Ảnh hưởng của tư tưởng Machismo (nam tính cực đoan).", "Phụ nữ gặp nhiều rào cản trong việc tiếp cận việc làm chất lượng cao và cơ hội thăng tiến.", "Gia tăng bất bình đẳng trong phân công lao động và tiền lương."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "180 Triệu" }, { label: "Tổng lao động nữ", value: "95 Triệu (53%)" }]
+            },
+            oceania: {
+                id: "oceania",
+                name: "Châu Đại Dương",
+                description: "Phụ nữ có vị thế cao trong xã hội với mức độ bình đẳng giới đáng kể, tham gia tích cực vào chính trị và kinh tế.",
+                details: ["Vẫn đối mặt với chênh lệch thu nhập, tỷ lệ giữ vị trí lãnh đạo chưa tương xứng và áp lực cân bằng giữa công việc và gia đình.", "Phụ nữ bản địa gặp nhiều bất lợi hơn trong tiếp cận việc làm ổn định và thu nhập cao.", "Tại các quốc đảo Thái Bình Dương, phụ nữ tham gia lao động chủ yếu trong khu vực phi chính thức, nông nghiệp và công việc gia đình không được trả lương.", "Gặp nhiều hạn chế về giáo dục và kỹ năng nghề, dẫn đến cơ hội việc làm thấp và thu nhập không ổn định.", "Biến đổi khí hậu cũng ảnh hưởng đến sinh kế (như nông nghiệp, thủy sản), làm gia tăng khó khăn đối với lao động nữ."],
+                stats: [{ label: "Tổng dân số nữ độ tuổi lao động", value: "17 Triệu" }, { label: "Tổng lao động nữ", value: "10 Triệu (60%)" }]
+            }
+        };
+
+        const COUNTRY_TO_REGION = {
+            "156": "east_asia", "392": "east_asia", "408": "east_asia", "410": "east_asia", "496": "east_asia", "158": "east_asia", "360": "east_asia", "458": "east_asia", "608": "east_asia", "764": "east_asia", "704": "east_asia", "116": "east_asia", "418": "east_asia", "702": "east_asia", "626": "east_asia", "096": "east_asia", "104": "east_asia", "CHN": "east_asia", "JPN": "east_asia", "KOR": "east_asia", "PRK": "east_asia", "MNG": "east_asia", "TWN": "east_asia", "IDN": "east_asia", "MYS": "east_asia", "PHL": "east_asia", "THA": "east_asia", "VNM": "east_asia", "MMR": "east_asia", "China": "east_asia", "Japan": "east_asia", "South Korea": "east_asia", "North Korea": "east_asia", "Mongolia": "east_asia", "Indonesia": "east_asia", "Malaysia": "east_asia", "Philippines": "east_asia", "Thailand": "east_asia", "Vietnam": "east_asia", "Myanmar": "east_asia",
+            "050": "south_asia", "064": "south_asia", "356": "south_asia", "462": "south_asia", "524": "south_asia", "586": "south_asia", "144": "south_asia", "IND": "south_asia", "PAK": "south_asia", "BGD": "south_asia", "NPL": "south_asia", "LKA": "south_asia", "AFG": "south_asia", "India": "south_asia", "Pakistan": "south_asia", "Bangladesh": "south_asia", "Nepal": "south_asia", "Sri Lanka": "south_asia", "Afghanistan": "south_asia",
+            "398": "central_asia", "860": "central_asia", "795": "central_asia", "417": "central_asia", "762": "central_asia", "KAZ": "central_asia", "UZB": "central_asia", "TKM": "central_asia", "KGZ": "central_asia", "TJK": "central_asia", "Kazakhstan": "central_asia", "Uzbekistan": "central_asia", "Turkmenistan": "central_asia", "Kyrgyzstan": "central_asia", "Tajikistan": "central_asia",
+            "031": "west_asia", "051": "west_asia", "048": "west_asia", "196": "west_asia", "268": "west_asia", "368": "west_asia", "364": "west_asia", "376": "west_asia", "400": "west_asia", "414": "west_asia", "422": "west_asia", "512": "west_asia", "634": "west_asia", "682": "west_asia", "760": "west_asia", "792": "west_asia", "784": "west_asia", "887": "west_asia", "TUR": "west_asia", "IRN": "west_asia", "SAU": "west_asia", "IRQ": "west_asia", "ISR": "west_asia", "ARE": "west_asia", "YEM": "west_asia", "Turkey": "west_asia", "Iran": "west_asia", "Saudi Arabia": "west_asia", "Iraq": "west_asia", "Israel": "west_asia",
+            "012": "north_africa", "818": "north_africa", "434": "north_africa", "504": "north_africa", "788": "north_africa", "729": "north_africa", "732": "north_africa", "DZA": "north_africa", "EGY": "north_africa", "LBY": "north_africa", "MAR": "north_africa", "TUN": "north_africa", "SDN": "north_africa", "Algeria": "north_africa", "Egypt": "north_africa", "Libya": "north_africa", "Morocco": "north_africa", "Tunisia": "north_africa", "Sudan": "north_africa",
+            "710": "southern_africa", "516": "southern_africa", "072": "southern_africa", "748": "southern_africa", "426": "southern_africa", "894": "southern_africa", "716": "southern_africa", "508": "southern_africa", "024": "southern_africa", "454": "southern_africa", "ZAF": "southern_africa", "NAM": "southern_africa", "BWA": "southern_africa", "ZWE": "southern_africa", "MOZ": "southern_africa", "MWI": "southern_africa", "ZMB": "southern_africa", "AGO": "southern_africa", "South Africa": "southern_africa", "Namibia": "southern_africa", "Botswana": "southern_africa", "Zimbabwe": "southern_africa", "Mozambique": "southern_africa", "Angola": "southern_africa",
+            "204": "central_africa", "120": "central_africa", "132": "central_africa", "140": "central_africa", "148": "central_africa", "174": "central_africa", "178": "central_africa", "180": "central_africa", "226": "central_africa", "232": "central_africa", "231": "central_africa", "266": "central_africa", "270": "central_africa", "288": "central_africa", "324": "central_africa", "384": "central_africa", "404": "central_africa", "430": "central_africa", "450": "central_africa", "466": "central_africa", "478": "central_africa", "480": "central_africa", "562": "central_africa", "566": "central_africa", "646": "central_africa", "678": "central_africa", "686": "central_africa", "690": "central_africa", "694": "central_africa", "706": "central_africa", "728": "central_africa", "768": "central_africa", "800": "central_africa", "834": "central_africa", "854": "central_africa", "NGA": "central_africa", "ETH": "central_africa", "KEN": "central_africa", "COD": "central_africa", "TZA": "central_africa", "Nigeria": "central_africa", "Ethiopia": "central_africa", "Kenya": "central_africa", "Congo": "central_africa",
+            "643": "east_europe", "616": "east_europe", "804": "east_europe", "112": "east_europe", "642": "east_europe", "100": "east_europe", "348": "east_europe", "203": "east_europe", "703": "east_europe", "498": "east_europe", "RUS": "east_europe", "POL": "east_europe", "UKR": "east_europe", "BLR": "east_europe", "ROU": "east_europe", "BGR": "east_europe", "HUN": "east_europe", "CZE": "east_europe", "Russia": "east_europe", "Poland": "east_europe", "Ukraine": "east_europe", "Romania": "east_europe", "Czech Republic": "east_europe",
+            "250": "west_europe", "276": "west_europe", "826": "west_europe", "380": "west_europe", "724": "west_europe", "528": "west_europe", "056": "west_europe", "756": "west_europe", "040": "west_europe", "620": "west_europe", "300": "west_europe", "208": "west_europe", "578": "west_europe", "752": "west_europe", "246": "west_europe", "372": "west_europe", "352": "west_europe", "442": "west_europe", "470": "west_europe", "070": "west_europe", "191": "west_europe", "688": "west_europe", "705": "west_europe", "008": "west_europe", "807": "west_europe", "FRA": "west_europe", "DEU": "west_europe", "GBR": "west_europe", "ITA": "west_europe", "ESP": "west_europe", "NLD": "west_europe", "BEL": "west_europe", "CHE": "west_europe", "AUT": "west_europe", "PRT": "west_europe", "GRC": "west_europe", "France": "west_europe", "Germany": "west_europe", "United Kingdom": "west_europe", "Italy": "west_europe", "Spain": "west_europe",
+            "124": "north_america", "840": "north_america", "484": "north_america", "084": "north_america", "188": "north_america", "222": "north_america", "320": "north_america", "340": "north_america", "558": "north_america", "591": "north_america", "044": "north_america", "192": "north_america", "214": "north_america", "332": "north_america", "388": "north_america", "630": "north_america", "780": "north_america", "USA": "north_america", "CAN": "north_america", "MEX": "north_america", "United States of America": "north_america", "Canada": "north_america", "Mexico": "north_america",
+            "032": "south_america", "068": "south_america", "076": "south_america", "152": "south_america", "170": "south_america", "218": "south_america", "328": "south_america", "600": "south_america", "604": "south_america", "740": "south_america", "858": "south_america", "862": "south_america", "BRA": "south_america", "ARG": "south_america", "COL": "south_america", "CHL": "south_america", "PER": "south_america", "Brazil": "south_america", "Argentina": "south_america", "Colombia": "south_america", "Chile": "south_america", "Peru": "south_america",
+            "036": "oceania", "554": "oceania", "242": "oceania", "598": "oceania", "548": "oceania", "296": "oceania", "540": "oceania", "AUS": "oceania", "NZL": "oceania", "PNG": "oceania", "Australia": "oceania", "New Zealand": "oceania", "Papua New Guinea": "oceania"
+        };
+
+        const TOPO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
+        function openCard(regionId) {
+            const data = REGIONS[regionId];
+            if(!data) return;
+
+            document.getElementById('card-title').innerText = data.name;
+            document.getElementById('card-desc').innerText = data.description;
+            
+            const statsHtml = data.stats.map(s => `
+                <div class="stat-box">
+                    <span style="display:block; font-size:10px; text-transform:uppercase; letter-spacing: 0.05em; font-weight:bold; color:#6c292a; opacity:0.6; margin-bottom:4px;">${s.label}</span>
+                    <span style="font-size:0.875rem; font-weight:bold; color:#6c292a;">${s.value}</span>
+                </div>
+            `).join('');
+            document.getElementById('card-stats').innerHTML = statsHtml;
+
+            const detailsHtml = data.details.map(d => `
+                <div class="detail-box">
+                    <div style="margin-top: 6px; width: 8px; height: 8px; border-radius: 50%; background-color: #6c292a; flex-shrink: 0;"></div>
+                    <p style="font-size: 0.875rem; font-weight: 500; color: #6c292a; opacity: 0.9; margin: 0;">${d}</p>
+                </div>
+            `).join('');
+            document.getElementById('card-details').innerHTML = detailsHtml;
+
+            document.getElementById('region-card').classList.add('open');
+            
+            // Đổi màu khu vực đang chọn
+            d3.selectAll('.region-path').style('fill', '#f2edd8');
+            d3.select(`#path-${regionId}`).style('fill', '#6c292a');
+        }
+
+        function closeCard() {
+            document.getElementById('region-card').classList.remove('open');
+            d3.selectAll('.region-path').style('fill', '#f2edd8');
+        }
+
+        window.onload = function() {
+            const container = document.getElementById('map-container');
+            const svg = d3.select('#map-svg');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            d3.json(TOPO_URL).then(geodata => {
+                document.getElementById('loading-screen').style.display = 'none';
+
+                const projection = d3.geoNaturalEarth1()
+                    .scale(width / 1.5 / Math.PI)
+                    .translate([width / 2, height / 1.8]);
+
+                const path = d3.geoPath().projection(projection);
+                const countriesObj = geodata.objects.countries;
+                const regionGeometries = new Map();
+
+                countriesObj.geometries.forEach(d => {
+                    const regionId = COUNTRY_TO_REGION[d.id] || COUNTRY_TO_REGION[d.properties?.name] || null;
+                    if (regionId && REGIONS[regionId]) {
+                        if (!regionGeometries.has(regionId)) regionGeometries.set(regionId, []);
+                        regionGeometries.get(regionId).push(d);
+                    }
+                });
+
+                const mergedRegions = Array.from(regionGeometries.entries()).map(([id, geometries]) => ({
+                    id,
+                    feature: topojson.merge(geodata, geometries),
+                    info: REGIONS[id]
+                }));
+
+                const g = svg.append("g");
+
+                // Màu nền đại dương (giống bản gốc React)
+                g.append("rect")
+                    .attr("width", width * 2)
+                    .attr("height", height * 2)
+                    .attr("x", -width/2)
+                    .attr("y", -height/2)
+                    .attr("fill", "#875050");
+
+                // Vẽ các khu vực
+                g.selectAll(".region")
+                    .data(mergedRegions)
+                    .enter()
+                    .append("path")
+                    .attr("class", "region-path")
+                    .attr("id", d => `path-${d.id}`)
+                    .attr("d", d => path(d.feature))
+                    .attr("fill", "#f2edd8")
+                    .attr("stroke", "#875050")
+                    .attr("stroke-width", 1)
+                    .on("mouseover", function() {
+                        if (!document.getElementById('region-card').classList.contains('open')) {
+                            d3.select(this).style('fill', '#6c292a');
+                        }
+                    })
+                    .on("mouseout", function() {
+                        if (!document.getElementById('region-card').classList.contains('open')) {
+                            d3.select(this).style('fill', '#f2edd8');
+                        }
+                    })
+                    .on("click", (event, d) => openCard(d.id));
+
+                const zoom = d3.zoom()
+                    .scaleExtent([1, 8])
+                    .on("zoom", (event) => {
+                        g.attr("transform", event.transform);
+                    });
+
+                svg.call(zoom);
+            });
+        };
+    </script>
+
+</body>
+</html>

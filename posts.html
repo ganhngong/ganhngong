@@ -146,6 +146,12 @@
 
         .sort-select:hover { border-color: var(--accent-color); }
 
+        /* FIX CSS: Màu nền và màu chữ cho menu xổ xuống */
+        .sort-select option {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
         .episode-list { display: flex; flex-direction: column; }
 
         .episode-item {
@@ -275,6 +281,15 @@
                     <p class="episode-desc">Khám phá sự giằng xé giữa hai thế giới của người phụ nữ hiện đại qua mô hình không gian 3D tương tác. Một trải nghiệm thị giác về gánh nặng vô hình và sự đa nhiệm không hồi kết.</p>
                 </a>
             </div>
+
+            <!-- BÀI 2 ĐƯỢC THÊM VÀO ĐÂY -->
+            <div class="episode-item fade-up" data-order="2">
+                <a href="./ban-do-tuong-tac.html" class="episode-link">
+                    <span class="episode-tag">Bài 2</span>
+                    <h2 class="episode-title">“Đặc quyền” hay “định kiến”? – Khám phá qua Interactive Map</h2>
+                    <p class="episode-desc">Những gì thường được gọi là “đặc quyền” dành cho phụ nữ – chăm sóc gia đình, giữ gìn hạnh phúc, làm hậu phương – liệu thực sự là quyền lợi, hay chỉ là những kỳ vọng được khoác lên lớp vỏ tích cực?</p>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -296,7 +311,7 @@
 
                 <div class="contact-item">
                     <strong>Điện thoại</strong>
-                    <p><a href="tel:00000000" style="color: var(--text-color); text-decoration: underline; text-underline-offset: 4px; transition: 0.3s;">00000000</a></p>
+                    <p><a href="tel:091 905 84 41" style="color: var(--text-color); text-decoration: underline; text-underline-offset: 4px; transition: 0.3s;">091 905 84 41 (Nguyễn Minh Hồng)</a></p>
                 </div>
             </div>
         </div>
