@@ -138,11 +138,6 @@
             box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
 
-        .video-container iframe {
-            border-radius: 12px;
-            max-width: 100%;
-        }
-
         .byline {
             margin-top: 4rem;
             padding-top: 2rem;
@@ -163,10 +158,9 @@
         @media (max-width: 768px) {
             .post-title { font-size: 2.5rem; }
             .container { padding: 3rem 5%; }
-            .video-container iframe {
+            .video-container video {
                 width: 100%;
                 height: auto;
-                aspect-ratio: 560 / 378;
             }
         }
     </style>
@@ -208,7 +202,10 @@
             </p>
 
             <div class="video-container fade-up">
-                <iframe src="https://www.facebook.com/plugins/video.php?height=378&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1169863801897912%2F&show_text=false&width=560&t=0" width="560" height="378" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>
+                <video width="100%" controls preload="metadata" style="border-radius: 12px; max-width: 560px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    <source src="final1TTĐPT.mp4" type="video/mp4">
+                    Trình duyệt của bạn không hỗ trợ thẻ video.
+                </video>
             </div>
 
             <p class="fade-up">
