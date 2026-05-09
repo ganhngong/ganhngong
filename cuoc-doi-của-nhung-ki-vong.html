@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gánh&Gồng - Cuộc đời của những kỳ vọng</title>
+    
+    <style>
+        /* 1. KHAI BÁO FONT NỘI BỘ */
+        @font-face {
+            font-family: 'AuraFont';
+            src: url('IMFeGPrm29P.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-color: #6c292a;
+            --text-color: #fdf5e7;
+            --accent-color: #e0d5b4;
+            --text-muted: rgba(253, 245, 231, 0.7);
+            --main-font: 'AuraFont', serif;
+        }
+
+        /* 2. THIẾT LẬP TOÀN TRANG */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: var(--main-font) !important; 
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* --- HIỆU ỨNG FADE UP --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 5%; 
+            position: sticky;
+            top: 0;
+            background-color: rgba(108, 41, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(253, 245, 231, 0.1);
+        }
+
+        .nav-logo { height: 105px; width: auto; object-fit: contain; transition: 0.4s; }
+
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1.5px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* NỘI DUNG BÀI VIẾT */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 5%;
+        }
+
+        .post-title {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            line-height: 1.2;
+            font-weight: 400;
+        }
+
+        .post-content {
+            font-size: 1.25rem;
+        }
+
+        .post-content p {
+            margin-bottom: 2rem;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .intro-text {
+            font-size: 1.4rem;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem !important;
+        }
+
+        .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 4rem 0;
+            padding: 1rem;
+            background: rgba(253, 245, 231, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .video-container iframe {
+            border-radius: 12px;
+            max-width: 100%;
+        }
+
+        .byline {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(253, 245, 231, 0.1);
+            text-align: right;
+            font-style: italic;
+            color: var(--accent-color);
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 4rem; 
+            opacity: 0.5; 
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .post-title { font-size: 2.5rem; }
+            .container { padding: 3rem 5%; }
+            .video-container iframe {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 560 / 378;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="./index.html"><img src="./logo.png" alt="Aura Logo" class="nav-logo"></a>
+        <div class="nav-links fade-up">
+            <a href="./index.html">Trang Chủ</a>
+            <a href="./posts.html">Bài viết</a>
+            <a href="./about.html">Về Chúng Tôi</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="post-title fade-up">Cuộc đời của những kỳ vọng</h1>
+
+        <div class="post-content">
+            <p class="intro-text fade-up">
+                “Phụ nữ giỏi là phải cân bằng được tất cả.”<br><br>
+                Đã bao nhiêu lần chúng ta nghe câu nói ấy? Như một thước đo vô hình, xã hội đặt lên vai người phụ nữ những kỳ vọng từ khi họ còn chưa kịp hiểu “trách nhiệm” là gì. Video animation dưới đây không chỉ là những nét vẽ, mà là bản đồ về “Cuộc đời của những kỳ vọng” - nơi mỗi giai đoạn trôi qua, gánh nặng lại trĩu thêm một chút.
+            </p>
+
+             <p class="fade-up">
+                <strong>Tuổi thơ - Nét vẽ hồn nhiên và “mầm mống” định kiến:</strong> Bé gái bắt đầu với những giấc mơ thơ ngây. Nhưng ngay lúc đó, những kỳ vọng từ người lớn vô tình đặt lên vai em những viên gạch đầu tiên. Sự hồn nhiên dần bị thay thế bởi sự khuôn mẫu.
+            </p>
+
+            <p class="fade-up">
+                <strong>Tuổi thiếu niên - Áp lực “toàn diện”:</strong> Không chỉ dừng lại ở học giỏi, xã hội bắt đầu kỳ vọng thiếu nữ phải là hình mẫu của sự tử tế, khéo léo. Hai chữ “trách nhiệm” bắt đầu xuất hiện trong những suy nghĩ ngây thơ, khi em phải vừa học thật tốt, vừa quán xuyến việc nhà để xứng đáng với sự kỳ vọng của gia đình.
+            </p>
+
+            <p class="fade-up">
+                <strong>Trưởng thành - Định nghĩa “hoàn hảo”:</strong> Khi bước vào đời sống hôn nhân, áp lực không chỉ nhân đôi mà còn chồng chéo bởi những nghịch lý khắc nghiệt. Xã hội kỳ vọng cô ấy phải “giỏi việc nước” như một nhân viên mẫn cán, nhưng khi trở về nhà, cô ấy lại bị mặc định phải là một người vợ “tận tụy” với gian bếp. Sự kỳ vọng về một người phụ nữ “ba đầu sáu tay” tạo nên một cái bẫy hoàn hảo: Nếu cô ấy chú tâm vào sự nghiệp, cô ấy bị coi là “ích kỷ, bỏ bê gia đình”; nhưng nếu cô ấy dành ưu tiên cho tổ ấm, sự hy sinh đó lại bị xem là “hiển nhiên” và dần bị lu mờ.
+            </p>
+
+            <p class="fade-up">
+                <strong>Làm mẹ - Sự hy sinh được mặc định:</strong> Khi thiên chức làm mẹ gõ cửa, gánh nặng ấy chính thức chạm tới đỉnh điểm. “Mẹ” dường như không còn là một danh xưng thiêng liêng đơn thuần, mà trở thành một “đặc quyền” bị gắn mác phải biết làm tất cả. Hình ảnh người mẹ vừa dỗ dành con ngủ, vừa vội vàng gõ phím hoàn thành bản báo cáo trong ánh đèn khuya đã không còn xa lạ. Đó là sự giằng xé khi tâm trí phải phân đôi: một nửa lo cho sự êm ấm của tổ ấm, một nửa lo cho sự thành công ngoài xã hội.
+            </p>
+
+            <div class="video-container fade-up">
+                <iframe src="https://www.facebook.com/plugins/video.php?height=378&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1169863801897912%2F&show_text=false&width=560&t=0" width="560" height="378" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>
+            </div>
+
+            <p class="fade-up">
+                <strong>Cả một đời – Một chuỗi kỳ vọng nối dài:</strong> Mỗi chặng đường đi qua, những gánh nặng dường như không mất đi mà chỉ âm thầm xếp chồng lên nhau. Cho đến khi nhìn lại, cô ấy thấy mình đã gánh vác cả một thế giới, nhưng lại vô tình để quên mất chính mình ở phía sau.
+            </p>
+
+            <p class="fade-up">
+                Nhưng, vòng lặp này không nhất thiết phải là mãi mãi. Chúng mình thực hiện dự án này với một niềm tin rằng: Đã đến lúc thế hệ của chúng ta thay đổi nhận thức. Chúng ta không chỉ cùng nhau nhìn thấy những định kiến đang bủa vây người phụ nữ, mà còn cùng nhau gỡ bỏ chúng. Hãy để sự sẻ chia thay thế cho sự hy sinh mặc định, và để sự thấu cảm thay thế cho những tiêu chuẩn kép khắc nghiệt.
+            </p>
+
+             <p class="fade-up">
+                Chúng mình khao khát lan tỏa một tư duy mới: Một người phụ nữ hoàn hảo không phải là người có thể gánh vác tất cả trên đôi vai, mà là người được tự do lựa chọn những gì mình muốn gánh vác. Đã đến lúc mỗi người phụ nữ được quyền rũ bỏ những định kiến lỗi thời, tìm lại bản sắc riêng và học cách ôm lấy chính mình với tất cả sự trân trọng. Vì mỗi người phụ nữ đều xứng đáng được sống một cuộc đời, chứ không phải là một “vai diễn” được xã hội viết sẵn.
+            </p>
+
+            <div class="byline fade-up">
+                Thực hiện bởi Quỳnh Anh
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Hiệu ứng Fade-up
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body>
+</html>
