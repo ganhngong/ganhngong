@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gánh&Gồng - Xã hội nghĩ gì?</title>
+    
+    <style>
+        /* 1. KHAI BÁO FONT NỘI BỘ */
+        @font-face {
+            font-family: 'AuraFont';
+            src: url('IMFeGPrm29P.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-color: #6c292a;
+            --text-color: #fdf5e7;
+            --accent-color: #e0d5b4;
+            --text-muted: rgba(253, 245, 231, 0.7);
+            --main-font: 'AuraFont', serif;
+        }
+
+        /* 2. THIẾT LẬP TOÀN TRANG */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: var(--main-font) !important; 
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* --- HIỆU ỨNG FADE UP --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 5%; 
+            position: sticky;
+            top: 0;
+            background-color: rgba(108, 41, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(253, 245, 231, 0.1);
+        }
+
+        .nav-logo { height: 105px; width: auto; object-fit: contain; transition: 0.4s; }
+
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1.5px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* NỘI DUNG BÀI VIẾT */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 5%;
+        }
+
+        .post-title {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            line-height: 1.2;
+            font-weight: 400;
+        }
+
+        .post-content {
+            font-size: 1.25rem;
+        }
+
+        .post-content p {
+            margin-bottom: 2rem;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .intro-text {
+            font-size: 1.4rem;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem !important;
+        }
+
+        .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 4rem 0;
+            padding: 1rem;
+            background: rgba(253, 245, 231, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .byline {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(253, 245, 231, 0.1);
+            text-align: right;
+            font-style: italic;
+            color: var(--accent-color);
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 4rem; 
+            opacity: 0.5; 
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .post-title { font-size: 2.5rem; }
+            .container { padding: 3rem 5%; }
+            .video-container video {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="./index.html"><img src="./logo.png" alt="Aura Logo" class="nav-logo"></a>
+        <div class="nav-links fade-up">
+            <a href="./index.html">Trang Chủ</a>
+            <a href="./posts.html">Bài viết</a>
+            <a href="./about.html">Về Chúng Tôi</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="post-title fade-up">Xã hội nghĩ gì?</h1>
+
+        <div class="post-content">
+            <p class="intro-text fade-up">
+                “Giữa việc nhà và việc nước, trách nhiệm thuộc về ai?”<br>
+                Để tìm câu trả lời cho câu hỏi tưởng chừng đơn giản ấy, nhóm Gánh&Gồng đã thực hiện một chuyến thực nghiệm xã hội tại Phố đi bộ Hồ Gươm. Với chiếc bảng chia hai cột và những sticker xanh - hồng, chúng mình đã nhận về những kết quả đầy bất ngờ và cả những khoảng lặng đáng suy ngẫm.
+            </p>
+
+            <div class="video-container fade-up">
+                <video width="100%" controls preload="metadata" style="border-radius: 12px; max-width: 560px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    <source src="vidbai5.mp4" type="video/mp4">
+                    Trình duyệt của bạn không hỗ trợ thẻ video.
+                </video>
+            </div>
+
+             <p class="fade-up">
+                <strong>Một tín hiệu đáng mừng trong xã hội hiện nay:</strong> Kết quả thực nghiệm cho thấy ranh giới của những định kiến cũ đang dần được xóa nhòa. Cả đàn ông và phụ nữ đều đang tham gia tích cực vào cả “việc nhà” lẫn “việc nước”. Chúng mình đã bắt gặp rất nhiều sắc xanh (nam giới) tự tin xuất hiện ở cột nội trợ và những sắc hồng (nữ giới) phủ sóng mạnh mẽ ở cột kinh tế. Điều này minh chứng cho một xã hội đang chuyển mình hướng tới sự bình đẳng và thấu hiểu.
+            </p>
+
+            <p class="fade-up">
+                <strong>Tuy nhiên, vẫn còn đó những nỗ lực thầm lặng...</strong><br>
+                Dù sự sẻ chia đã xuất hiện, nhưng nhìn vào bảng thực nghiệm, chúng ta vẫn thấy một sự “nhỉnh hơn” của sắc hồng ở cả hai vai trò. Phụ nữ ngày nay không chỉ nỗ lực khẳng định mình ngoài xã hội mà vẫn đang bền bỉ quán xuyến việc gia đình. Khi sự “đa nhiệm” trở thành điều mặc định, nó vô tình tạo nên một gánh nặng hai vai âm thầm mà không phải ai cũng thấu hiểu.
+            </p>
+
+            <p class="fade-up">
+                <strong>Đằng sau những sticker là những tiếng lòng chưa kể:</strong><br>
+                Trong chiếc hộp ẩn danh, chúng mình đã nhận được những dòng tâm sự đầy trăn trở. Có những sự mệt mỏi kéo dài, có những áp lực phải luôn chu toàn, và có cả những mong cầu giản đơn về sự sẻ chia thực thụ từ người đồng hành.
+            </p>
+
+            <p class="fade-up">
+                Thông qua video này, Gánh&Gồng mong muốn chúng ta hãy nhìn nhận sự đa nhiệm của phụ nữ không phải là một “thiên chức” hiển nhiên, mà là sự nỗ lực cần được trân trọng và san sẻ. Một gia đình hạnh phúc cần sự đồng hành từ tất cả mọi người, để “gánh nặng” hóa thành “sẻ chia”.
+            </p>
+
+            <div class="byline fade-up">
+                Thực hiện bởi ____
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Hiệu ứng Fade-up
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body>
+</html>

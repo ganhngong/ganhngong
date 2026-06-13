@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gánh&Gồng - Lặng mình lắng nghe - Podcast</title>
+    
+    <style>
+        /* 1. KHAI BÁO FONT NỘI BỘ */
+        @font-face {
+            font-family: 'AuraFont';
+            src: url('IMFeGPrm29P.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-color: #6c292a;
+            --text-color: #fdf5e7;
+            --accent-color: #e0d5b4;
+            --text-muted: rgba(253, 245, 231, 0.7);
+            --main-font: 'AuraFont', serif;
+        }
+
+        /* 2. THIẾT LẬP TOÀN TRANG */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: var(--main-font) !important; 
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* --- HIỆU ỨNG FADE UP --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 5%; 
+            position: sticky;
+            top: 0;
+            background-color: rgba(108, 41, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(253, 245, 231, 0.1);
+        }
+
+        .nav-logo { height: 105px; width: auto; object-fit: contain; transition: 0.4s; }
+
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1.5px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* NỘI DUNG BÀI VIẾT */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 5%;
+        }
+
+        .post-title {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            line-height: 1.2;
+            font-weight: 400;
+        }
+
+        .post-content {
+            font-size: 1.25rem;
+        }
+
+        .post-content p {
+            margin-bottom: 2rem;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .intro-text {
+            font-size: 1.4rem;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem !important;
+        }
+
+        .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 4rem 0;
+            padding: 1rem;
+            background: rgba(253, 245, 231, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .byline {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(253, 245, 231, 0.1);
+            text-align: right;
+            font-style: italic;
+            color: var(--accent-color);
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 4rem; 
+            opacity: 0.5; 
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .post-title { font-size: 2.5rem; }
+            .container { padding: 3rem 5%; }
+            .video-container video {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="./index.html"><img src="./logo.png" alt="Aura Logo" class="nav-logo"></a>
+        <div class="nav-links fade-up">
+            <a href="./index.html">Trang Chủ</a>
+            <a href="./posts.html">Bài viết</a>
+            <a href="./about.html">Về Chúng Tôi</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="post-title fade-up">Lặng mình lắng nghe - Podcast</h1>
+
+        <div class="post-content">
+            <p class="intro-text fade-up">
+                Có những áp lực không ai nhìn thấy, nhưng nhiều phụ nữ vẫn đang âm thầm mang theo mỗi ngày. Đi làm, chăm sóc gia đình, quan tâm cảm xúc của mọi người… và luôn cố gắng trở thành phiên bản “đủ tốt” trong mọi vai trò.<br>Trong tập podcast lần này, Gánh&Gồng muốn cùng mọi người lắng nghe những chia sẻ rất đời thường về “gánh nặng hai vai” ấy - khi mà sự mạnh mẽ đôi lúc lại trở thành áp lực vô hình.
+            </p>
+
+            <div class="video-container fade-up">
+                <iframe 
+                    src="https://www.youtube.com/embed/gL559SKA1IM?si=bHRxe2worM5pu7z8" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="strict-origin-when-cross-origin" 
+                    allowfullscreen
+                    style="width: 100%; max-width: 560px; aspect-ratio: 16/9; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                </iframe>
+            </div>
+
+            <p class="fade-up">
+                Phụ nữ có thật sự phải “cân được tất cả”?<br>
+                Vì sao nhiều người luôn nói “không sao đâu” dù đã rất mệt?<br>
+                Và liệu sự hy sinh có đang dần bị xem là điều hiển nhiên?
+            </p>
+
+            <p class="fade-up">
+                Chúng mình hy vọng sau cuộc trò chuyện này, mỗi người sẽ học cách thấu hiểu, sẻ chia và quan tâm nhiều hơn đến những người phụ nữ bên cạnh mình.
+            </p>
+
+            <p class="fade-up">
+                Cảm ơn mọi người đã đồng hành cùng Gánh&Gồng.<br>
+                Nếu bạn thấy đồng cảm, hãy chia sẻ podcast để lan tỏa sự lắng nghe nhé!
+            </p>
+
+            <div class="byline fade-up">
+                Thực hiện bởi __
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Hiệu ứng Fade-up
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body>
+</html>

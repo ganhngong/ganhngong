@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gánh&Gồng - Góc nhìn của nam giới</title>
+    
+    <style>
+        /* 1. KHAI BÁO FONT NỘI BỘ */
+        @font-face {
+            font-family: 'AuraFont';
+            src: url('IMFeGPrm29P.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-color: #6c292a;
+            --text-color: #fdf5e7;
+            --accent-color: #e0d5b4;
+            --text-muted: rgba(253, 245, 231, 0.7);
+            --main-font: 'AuraFont', serif;
+        }
+
+        /* 2. THIẾT LẬP TOÀN TRANG */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: var(--main-font) !important; 
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* --- HIỆU ỨNG FADE UP --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 5%; 
+            position: sticky;
+            top: 0;
+            background-color: rgba(108, 41, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(253, 245, 231, 0.1);
+        }
+
+        .nav-logo { height: 105px; width: auto; object-fit: contain; transition: 0.4s; }
+
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1.5px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* NỘI DUNG BÀI VIẾT */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 5%;
+        }
+
+        .post-title {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            font-weight: 400;
+        }
+
+        .post-subtitle {
+            font-size: 1.6rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--accent-color);
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .post-content {
+            font-size: 1.25rem;
+        }
+
+        .post-content p {
+            margin-bottom: 2rem;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .intro-text {
+            font-size: 1.4rem;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem !important;
+        }
+
+        /* KHUNG PHỎNG VẤN CHUYÊN BIỆT */
+        .interview-block {
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .interview-category {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(253, 245, 231, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
+        .interviewee-name {
+            font-size: 1.35rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+        }
+
+        .qa-item {
+            margin-bottom: 2.5rem;
+            padding-left: 1rem;
+            border-left: 2px solid rgba(224, 213, 180, 0.3);
+        }
+
+        .question {
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .answer {
+            text-align: justify;
+        }
+
+        /* KHUNG HÌNH ẢNH */
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 3rem 0;
+            padding: 1rem;
+            background: rgba(253, 245, 231, 0.03);
+            border-radius: 16px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .image-caption {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .byline {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(253, 245, 231, 0.1);
+            text-align: right;
+            font-style: italic;
+            color: var(--accent-color);
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 4rem; 
+            opacity: 0.5; 
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .post-title { font-size: 2.5rem; }
+            .post-subtitle { font-size: 1.25rem; }
+            .container { padding: 3rem 5%; }
+            .interview-category { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="./index.html"><img src="./logo.png" alt="Aura Logo" class="nav-logo"></a>
+        <div class="nav-links fade-up">
+            <a href="./index.html">Trang Chủ</a>
+            <a href="./posts.html">Bài viết</a>
+            <a href="./about.html">Về Chúng Tôi</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="post-title fade-up">Góc nhìn của nam giới</h1>
+        <div class="post-subtitle fade-up">Đàn ông nghĩ gì về những “GÁNH&GỒNG” của phụ nữ?</div>
+
+        <div class="post-content">
+            <p class="intro-text fade-up">
+                Tiếp nối hành trình của “GÁNH&GỒNG”, chúng mình lựa chọn lắng nghe những góc nhìn từ nam giới thuộc nhiều thế hệ khác nhau — từ học sinh, sinh viên đến những người đã lập gia đình và các bác lớn tuổi — để hiểu hơn về cách đàn ông nhìn nhận những áp lực của phụ nữ.
+            </p>
+
+            <p class="fade-up">
+                Qua những cuộc trò chuyện, chúng mình thấy có người cho rằng phụ nữ đang phải chịu áp lực “gấp đôi” khi vừa đi làm vừa quán xuyến việc nhà. Có người nhìn nhận rằng những định kiến như “giỏi việc nước, đảm việc nhà” đã vô tình khiến phụ nữ luôn cảm thấy mình phải hy sinh và gồng gánh nhiều hơn. Cũng có những người thừa nhận rằng trước đây đàn ông thường ít chia sẻ việc nhà, nhưng hiện nay sự đồng hành giữa vợ và chồng đang trở thành yếu tố quan trọng để giữ gìn hạnh phúc gia đình.
+            </p>
+
+            <p class="fade-up">
+                Đặc biệt, một tín hiệu đáng mừng là ở thế hệ trẻ, many bạn đã không còn xem việc nhà hay chăm sóc gia đình là trách nhiệm mặc định của riêng phụ nữ. Thay vào đó, họ nhìn nhận đây là sự sẻ chia và đồng hành giữa cả hai phía trong một gia đình hiện đại.
+            </p>
+
+            <p class="fade-up">
+                Điểm chung trong những chia sẻ ấy là sự thấu hiểu: Việc nhà không nên là trách nhiệm mặc định của riêng phụ nữ và một gia đình hạnh phúc cần được xây dựng bằng sự sẻ chia từ cả hai phía.
+            </p>
+
+            <div class="interview-block fade-up">
+                <h2 class="interview-category">1. Học sinh</h2>
+                <div class="interviewee-name">Bạn Nguyễn Minh Sơn, 15 tuổi, đến từ Bắc Ninh</div>
+                
+                <div class="qa-item">
+                    <div class="question">1. Khi nhìn phụ nữ vừa đi làm vừa chăm lo gia đình, em có thấy họ đang chịu nhiều áp lực không?</div>
+                    <div class="answer">→ Em thấy là phụ nữ đang chịu rất nhiều áp lực đến từ cả hai phía: công việc ngoài xã hội đến công việc nội trợ trong gia đình.</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">2. Theo em, tại sao dù xã hội đã hiện đại hơn, nhưng người phụ nữ vẫn thường là người tự mặc định mình phải chu toàn mọi việc trong nhà? Có phải do chúng ta đã đặt lên vai họ quá nhiều kỳ vọng ngay từ nhỏ không?</div>
+                    <div class="answer">→ Từ trước đến nay, phụ nữ Việt Nam thường bị gắn cho một câu nói “giỏi việc nước, đảm việc nhà”. Em nghĩ là điều này xuất phát từ sự kỳ vọng của xã hội, bắt buộc người phụ nữ phải gánh vác hết trách nhiệm mà không được lựa chọn theo sở thích, mục tiêu cá nhân.</div>
+                </div>
+
+                <div class="image-container">
+                    <img src="BạnNguyễnMinhSơn_HSTHPTYênPhongsố1,BắcNinh.jpg" alt="Bạn Nguyễn Minh Sơn">
+                    <div class="image-caption">Bạn Nguyễn Minh Sơn - Học sinh THPT Yên Phong số 1, Bắc Ninh</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">3. So với thế hệ trước, nam giới hiện nay đã tham gia nhiều hơn vào việc gia đình. Em thấy sự thay đổi này mang lại giá trị gì lớn nhất cho hạnh phúc của một gia đình hiện đại?</div>
+                    <div class="answer">→ Em nghĩ là việc nam giới đang tham gia nhiều hơn vào các công việc gia đình đã gánh bớt một phần áp lực cho người phụ nữ, đồng thời, khiến cho công việc nội trợ được cân bằng hơn.</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">4. Em muốn nhắn gửi lời chúc hay lời động viên nào chân thành nhất đến những người phụ nữ đang “gánh và gồng” mỗi ngày, để họ cảm thấy nhẹ lòng và hạnh phúc hơn với chính mình?</div>
+                    <div class="answer">→ Hãy biết quan tâm, chăm sóc và sống vì chính mình. Luôn có mục tiêu, có định hướng cá nhân và không phải vì công việc gia đình hay chăm sóc người khác mà bỏ bê bản thân. Không nên vì những chuẩn mực của xã hội mà làm trái lại nguyện vọng, mong muốn của mình.</div>
+                </div>
+            </div>
+
+            <div class="interview-block fade-up">
+                <h2 class="interview-category">2. Sinh viên</h2>
+                <div class="interviewee-name">Ẩn danh</div>
+                
+                <div class="qa-item">
+                    <div class="question">1. Khi nhìn phụ nữ vừa đi làm vừa chăm lo gia đình, bạn có thấy họ đang chịu nhiều áp lực không?</div>
+                    <div class="answer">→ Khi mình nhìn thấy người phụ nữ vừa phải đi làm, vừa chăm lo gia đình, mình thấy rất áp lực và vất vả. Mình nghĩ rằng, muốn gia đình hạnh phúc thì người đàn ông phải giúp đỡ nhiều hơn trong công việc, họ phải biết quan tâm, cảm thông cho người phụ nữ.</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">2. Theo bạn, tại sao dù xã hội đã hiện đại hơn, nhưng người phụ nữ vẫn thường là người tự mặc định mình phải chu toàn mọi việc trong nhà? Có phải do chúng ta đã đặt lên vai họ quá nhiều kỳ vọng ngay từ nhỏ không?</div>
+                    <div class="answer">→ Mình nghĩ là dù xã hội hiện đại hơn nhưng nhiều quan niệm cũ vẫn ảnh hưởng rất mạnh đến phụ nữ từ khi còn nhỏ. Con gái thường được dạy phải biết hy sinh, chăm lo gia đình và chu toàn mọi việc, nên lâu dần họ tự xem đó là trách nhiệm của mình. Bên cạnh áp lực từ xã hội và gia đình, many phụ nữ cũng tự đặt tiêu chuẩn quá cao cho bản thân.</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">3. So với thế hệ trước, nam giới hiện nay đã tham gia nhiều hơn vào việc gia đình. Bạn thấy sự thay đổi này mang lại giá trị gì lớn nhất cho hạnh phúc của một gia đình hiện đại?</div>
+                    <div class="answer">→ Đối với mình, việc nhà là trách nhiệm của tất cả thành viên trong gia đình, không kể nam hay nữ. Không chỉ là trách nhiệm của người phụ nữ mà còn phải có sự đồng hành của người đàn ông. Có như vậy thì việc nhà mới có thể nhẹ nhàng, được giải quyết nhanh chóng và bớt đi cảm giác áp lực của người phụ nữ. Thông qua những hành động san sẻ đó, tình cảm gia đình cũng sẽ ngày càng hạnh phúc hơn.</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">4. Bạn muốn nhắn gửi lời chúc hay lời động viên nào chân thành nhất đến những người phụ nữ đang “gánh và gồng” mỗi ngày, để họ cảm thấy nhẹ lòng và hạnh phúc hơn với chính mình?</div>
+                    <div class="answer">→ Không cần phải mạnh mẽ và hoàn hảo mọi lúc mới là một người phụ nữ giỏi. Những cố gắng thầm lặng mỗi ngày đã rất đáng trân trọng rồi. Hy vọng những người phụ nữ ngoài kia biết yêu thương bản thân nhiều hơn, học cách nghỉ ngơi khi mệt và đừng tự tạo áp lực phải “gồng” một mình. Mong mỗi người phụ nữ đều được sẻ chia, được lắng nghe và hạnh phúc với chính cuộc sống của mình.</div>
+                </div>
+            </div>
+
+            <div class="interview-block fade-up">
+                <h2 class="interview-category">3. Trung niên</h2>
+                <div class="interviewee-name">Ẩn danh</div>
+                
+                <div class="qa-item">
+                    <div class="question">1. Khi nhìn phụ nữ vừa đi làm vừa chăm lo gia đình, chú có thấy họ đang chịu nhiều áp lực không?</div>
+                    <div class="answer">→ Chú thấy là có. Thông thường, đàn ông thường chỉ tập trung vào áp lực công việc bên ngoài, còn phụ nữ vừa phải đi làm vừa quán xuyến việc nhà, chăm sóc gia đình nên áp lực gần như gấp đôi. Chính vì vậy, many người phụ nữ dù rất mệt vẫn cố gắng để hoàn thành mọi thứ một cách chu toàn.</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">2. Theo chú, tại sao dù xã hội đã hiện đại hơn, nhưng người phụ nữ vẫn thường là người tự mặc định mình phải chu toàn mọi việc trong nhà? Có phải do chúng ta đã đặt lên vai họ quá nhiều kỳ vọng ngay từ nhỏ không?</div>
+                    <div class="answer">→ Theo chú, vấn đề này phần nào xuất phát từ áp lực làm dâu của người phụ nữ. Khi sống cùng gia đình nhà chồng, many người luôn cố gắng làm thật nhiều việc để vừa lòng bố mẹ chồng và tạo thiện cảm với mọi người. Lâu dần, điều đó khiến họ tự đặt lên vai mình trách nhiệm phải chu toàn mọi thứ, dù bản thân cũng rất áp lực và mệt mỏi.</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">3. So với thế hệ trước, nam giới hiện nay đã tham gia nhiều hơn vào việc gia đình. Chú thấy sự thay đổi này mang lại giá trị gì lớn nhất cho hạnh phúc của một gia đình hiện đại?</div>
+                    <div class="answer">→ Việc nhà nên là trách nhiệm san sẻ của cả vợ và chồng. Nếu mọi gánh nặng trong gia đình đều dồn lên vai người phụ nữ, lâu dần họ sẽ bị ảnh hưởng cả về sức khỏe thể chất lẫn tinh thần. Ngược lại, khi người đàn ông biết chia sẻ và cùng chăm lo gia đình, người phụ nữ sẽ bớt áp lực hơn và cuộc sống cũng trở nên cân bằng, hạnh phúc hơn.</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">4. Chú muốn nhắn gửi lời chúc hay lời động viên nào chân thành nhất đến những người phụ nữ đang “gánh và gồng” mỗi ngày, để họ cảm thấy nhẹ lòng và hạnh phúc hơn với chính mình?</div>
+                    <div class="answer">→ Đầu tiên, người phụ nữ cần biết nghĩ cho bản thân mình trước. Khi cảm thấy mệt mỏi hay áp lực, hãy thẳng thắn chia sẻ và góp ý để người chồng hiểu và cùng san sẻ, thay vì im lặng chịu đựng một mình. Chỉ khi được lắng nghe và thấu hiểu, họ mới có thể nhẹ lòng và cân bằng hơn trong cuộc sống.</div>
+                </div>
+            </div>
+
+            <div class="interview-block fade-up">
+                <h2 class="interview-category">4. Người lớn tuổi</h2>
+                <div class="interviewee-name">Bác Thịnh, 62 tuổi, Hà Nội</div>
+                
+                <div class="qa-item">
+                    <div class="question">1. Khi nhìn phụ nữ vừa đi làm vừa chăm lo gia đình, bác có thấy họ đang chịu nhiều áp lực không?</div>
+                    <div class="answer">→ Bác thấy xã hội ngày nay đã thay đổi rất nhiều so với trước đây. Nếu ngày xưa phụ nữ thường phải một mình gồng gánh cả công việc ngoài xã hội lẫn việc nhà, thì hiện nay nam nữ đã bình đẳng hơn và many người đàn ông cũng chủ động san sẻ việc nhà với phụ nữ.</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">2. Theo bác, tại sao dù xã hội đã hiện đại hơn, nhưng người phụ nữ vẫn thường là người tự mặc định mình phải chu toàn mọi việc trong nhà? Có phải do chúng ta đã đặt lên vai họ quá nhiều kỳ vọng ngay từ nhỏ không?</div>
+                    <div class="answer">→ Theo bác, chuyện đó cũng do nếp suy nghĩ từ xưa để lại thôi. Ngày trước phụ nữ thường được dạy phải lo toan nhà cửa, chăm chồng chăm con thì mới được xem là người phụ nữ tốt. Thành ra dù bây giờ xã hội hiện đại hơn, many người vẫn giữ suy nghĩ phải tự mình chu toàn mọi việc.</div>
+                </div>
+
+                <div class="image-container">
+                    <img src="BácThịnh62tuổi.jpg" alt="Bác Thịnh, 62 tuổi">
+                    <div class="image-caption">Bác Thịnh, 62 tuổi, bảo vệ, Hà Nội</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">3. So với thế hệ trước, nam giới hiện nay đã tham gia nhiều hơn vào việc gia đình. Bác thấy sự thay đổi này mang lại giá trị gì lớn nhất cho hạnh phúc của một gia đình hiện đại?</div>
+                    <div class="answer">→ Theo bác, sự thay đổi lớn nhất là trong gia đình bây giờ đã có sự đồng hành giữa vợ và chồng. Ngày xưa phụ nữ thường chịu nhiều thiệt thòi, vừa lo kiếm sống vừa quán xuyến việc nhà. Còn hiện nay, khi đàn ông biết chia sẻ và quan tâm đến gia đình nhiều hơn thì không khí trong nhà cũng vui vẻ, gắn bó và hạnh phúc hơn rất nhiều.</div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="question">4. Bác muốn nhắn gửi lời chúc hay lời động viên nào chân thành nhất đến những người phụ nữ đang “gánh và gồng” mỗi ngày, để họ cảm thấy nhẹ lòng và hạnh phúc hơn với chính mình?</div>
+                    <div class="answer">→ Người phụ nữ đừng sống quá thiệt thòi cho bản thân mình. Nếu mệt thì hãy nghỉ ngơi, nếu áp lực thì hãy chia sẻ với gia đình, đừng cố gắng gồng gánh mọi thứ một mình. Bác cũng mong những người phụ nữ có thể thấu hiểu và cảm thông cho đàn ông nhiều hơn, vì họ cũng chịu rất nhiều áp lực trong việc kiếm tiền và lo cho gia đình.</div>
+                </div>
+            </div>
+
+            <p class="fade-up" style="margin-top: 4rem;">
+                Series này không nhằm khẳng định mọi người đàn ông đều có cùng một suy nghĩ, mà để ghi lại những góc nhìn khác nhau và cả sự chuyển giao trong nhận thức giữa các thế hệ nam giới về vai trò của phụ nữ trong gia đình và xã hội.
+            </p>
+
+            <p class="fade-up">
+                Từ những quan niệm truyền thống đến tư duy cởi mở, từ sự vô thức trước áp lực của phụ nữ đến sự thấu hiểu và sẻ chia nhiều hơn — mỗi câu trả lời đều phản ánh một lát cắt rất thật của xã hội hiện nay. Và chính những khác biệt ấy đã cho thấy cách xã hội đang dần nhìn lại những “GÁNH&GỒNG” của người phụ nữ.
+            </p>
+
+            <div class="byline fade-up">
+                Thực hiện bởi _____
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Hiệu ứng Fade-up
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body>
+</html>

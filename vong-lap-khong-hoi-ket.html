@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gánh&Gồng - Vòng lặp không hồi kết</title>
+    
+    <style>
+        /* 1. KHAI BÁO FONT NỘI BỘ */
+        @font-face {
+            font-family: 'AuraFont';
+            src: url('IMFeGPrm29P.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-color: #6c292a;
+            --text-color: #fdf5e7;
+            --accent-color: #e0d5b4;
+            --text-muted: rgba(253, 245, 231, 0.7);
+            --main-font: 'AuraFont', serif;
+        }
+
+        /* 2. THIẾT LẬP TOÀN TRANG */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: var(--main-font) !important; 
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* --- HIỆU ỨNG FADE UP --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                        transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 5%; 
+            position: sticky;
+            top: 0;
+            background-color: rgba(108, 41, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(253, 245, 231, 0.1);
+        }
+
+        .nav-logo { height: 105px; width: auto; object-fit: contain; transition: 0.4s; }
+
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1.5px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* NỘI DUNG BÀI VIẾT */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 5%;
+        }
+
+        .post-title {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            line-height: 1.2;
+            font-weight: 400;
+        }
+
+        .post-content {
+            font-size: 1.25rem;
+        }
+
+        .post-content p {
+            margin-bottom: 2rem;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .intro-text {
+            font-size: 1.4rem;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem !important;
+        }
+
+        .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 4rem 0;
+            padding: 1rem;
+            background: rgba(253, 245, 231, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .byline {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(253, 245, 231, 0.1);
+            text-align: right;
+            font-style: italic;
+            color: var(--accent-color);
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 4rem; 
+            opacity: 0.5; 
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .post-title { font-size: 2.5rem; }
+            .container { padding: 3rem 5%; }
+            .video-container video {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="./index.html"><img src="./logo.png" alt="Aura Logo" class="nav-logo"></a>
+        <div class="nav-links fade-up">
+            <a href="./index.html">Trang Chủ</a>
+            <a href="./posts.html">Bài viết</a>
+            <a href="./about.html">Về Chúng Tôi</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="post-title fade-up">Vòng lặp không hồi kết</h1>
+
+        <div class="post-content">
+            <p class="intro-text fade-up">
+                Đằng sau câu nói “Giỏi việc nước, đảm việc nhà” là bao nhiêu áp lực? Chúng ta đã quá quen với hình ảnh người phụ nữ “giỏi việc nước, đảm việc nhà” đến mức việc họ phải liên tục chuyển đổi giữa công việc, gia đình, chăm sóc con cái, đáp ứng được những kỳ vọng của xã hội đã trở thành điều hiển nhiên. Nhưng rất ít người nhìn thấy phía sau sự đa nhiệm ấy là sự mệt mỏi kéo dài, là áp lực phải luôn chu toàn, là những lời trách móc dù cô ấy đã cố gắng hết sức. Trong video lần này, chúng mình đã sử dụng phần mềm AI để tái hiện vòng lặp không hồi kết trong một ngày của người phụ nữ.
+            </p>
+
+            <div class="video-container fade-up">
+                <video width="100%" controls preload="metadata" style="border-radius: 12px; max-width: 560px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    <source src="VIDAICHINHTHUC.mp4" type="video/mp4">
+                    Trình duyệt của bạn không hỗ trợ thẻ video.
+                </video>
+            </div>
+
+             <p class="fade-up">
+                Một ngày của cô ấy bắt đầu từ trước khi mọi người thức giấc.
+            </p>
+
+            <p class="fade-up">
+                Chuẩn bị bữa sáng, dọn dẹp nhà cửa, nhắc nhở từng việc nhỏ rồi vội vã đến công ty. Ở nơi làm việc, cô ấy phải hoàn thành deadline, chịu đựng những lời trách móc của cấp trên, cố gắng không để ai thấy sự mệt mỏi hiện trên gương mặt.
+            </p>
+
+            <p class="fade-up">
+                Khi ngày làm việc của mọi người kết thúc, công việc của cô ấy vẫn chưa hết. Cô ấy trở về nhà với một danh sách trách nhiệm khác đang chờ sẵn: cơm nước, chăm sóc gia đình, lắng nghe, quan tâm và tiếp tục quán xuyến mọi thứ. Rồi lại bắt đầu một ngày mới. Không có thời gian nghỉ ngơi, không có khoảnh khắc nào dành cho bản thân.
+            </p>
+
+            <p class="fade-up">
+                Đôi khi, điều khiến người phụ nữ mệt mỏi không chỉ là khối lượng công việc, mà còn là cảm giác mình phải luôn mạnh mẽ và chu toàn trong mọi vai trò. Vì vậy, chúng mình làm video này để truyền tải thông điệp đến cho mọi người, đặc biệt là nam giới: thay vì mặc định rằng phụ nữ “giỏi việc nước, đảm việc nhà” là điều hiển nhiên, hãy học cách san sẻ trách nhiệm và lắng nghe nhiều hơn. Một gia đình hạnh phúc không nên được xây dựng trên sự hy sinh thầm lặng của một ai cả mà cần sự thấu hiểu và đồng hành từ tất cả mọi người. Và chúng mình có lời khuyên dành cho những người phụ nữ đang phải đối mặt với tình trạng này: hãy nhớ nghỉ ngơi không phải là ích kỷ mà là yêu thương bản thân mình. Bạn không cần phải hoàn hảo để xứng đáng được yêu thương và trân trọng.
+            </p>
+
+            <div class="byline fade-up">
+                Thực hiện bởi Anh Thư
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Hiệu ứng Fade-up
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body>
+</html>
