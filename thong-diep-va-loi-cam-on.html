@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gánh&Gồng - Vòng lặp không hồi kết</title>
+    <title>Gánh&Gồng - Thông điệp và lời cảm ơn</title>
     
     <style>
         /* 1. KHAI BÁO FONT NỘI BỘ */
@@ -127,15 +127,53 @@
             margin-bottom: 3rem !important;
         }
 
-        .video-container {
+        /* KHUNG HÌNH ẢNH */
+        .image-container {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             margin: 4rem 0;
             padding: 1rem;
-            background: rgba(253, 245, 231, 0.05);
-            border-radius: 20px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            background: rgba(253, 245, 231, 0.03);
+            border-radius: 16px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .image-caption {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* NÚT / LIÊN KẾT FACEBOOK */
+        .social-link-box {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .social-link-box a {
+            display: inline-block;
+            color: var(--bg-color);
+            background-color: var(--accent-color);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .social-link-box a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .byline {
@@ -158,10 +196,6 @@
         @media (max-width: 768px) {
             .post-title { font-size: 2.5rem; }
             .container { padding: 3rem 5%; }
-            .video-container video {
-                width: 100%;
-                height: auto;
-            }
         }
     </style>
 </head>
@@ -177,44 +211,58 @@
     </nav>
 
     <div class="container">
-        <h1 class="post-title fade-up">Vòng lặp không hồi kết</h1>
+        <h1 class="post-title fade-up">Thông điệp và lời cảm ơn</h1>
 
         <div class="post-content">
             <p class="intro-text fade-up">
-                Đằng sau câu nói “Giỏi việc nước, đảm việc nhà” là bao nhiêu áp lực? Chúng ta đã quá quen với hình ảnh người phụ nữ “giỏi việc nước, đảm việc nhà” đến mức việc họ phải liên tục chuyển đổi giữa công việc, gia đình, chăm sóc con cái, đáp ứng được những kỳ vọng của xã hội đã trở thành điều hiển nhiên. Nhưng rất ít người nhìn thấy phía sau sự đa nhiệm ấy là sự mệt mỏi kéo dài, là áp lực phải luôn chu toàn, là những lời trách móc dù cô ấy đã cố gắng hết sức. Trong video lần này, chúng mình đã sử dụng phần mềm AI để tái hiện vòng lặp không hồi kết trong một ngày của người phụ nữ.
+                Nếu ví dự án “Gánh&Gồng” là một chiếc kính vạn hoa thì mỗi lần xoay lăng kính, đi cùng với mỗi trải nghiệm thực hiện (từ mô hình 3D, bản đồ tương tác, video montage, AI, phỏng vấn/ khảo sát thực tế,..) chúng mình lại nhìn thấy một lát cắt khác nhau về cuộc sống của phụ nữ. Có những gam màu dịu dàng của yêu thương và hy sinh, có những gam màu trầm lặng của áp lực, định kiến và những gánh nặng vô hình mà đôi khi chẳng ai gọi tên. Nhưng xen giữa tất cả vẫn luôn là sự mạnh mẽ, bền bỉ và vẻ đẹp rất riêng của phụ nữ trong cuộc sống thường ngày.
             </p>
 
-            <div class="video-container fade-up">
-                <video width="100%" controls preload="metadata" style="border-radius: 12px; max-width: 560px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                    <source src="VIDAICHINHTHUC.mp4" type="video/mp4">
-                    Trình duyệt của bạn không hỗ trợ thẻ video.
-                </video>
+            <p class="fade-up">
+                Sau hơn 2 tháng triển khai, “Gánh&Gồng” đã nhận được rất nhiều sự quan tâm, theo dõi và đồng hành từ mọi người. Từng lượt chia sẻ, từng lời nhắn, từng sự thấu cảm dành cho dự án đều là động lực để chúng mình tiếp tục hoàn thiện từng sản phẩm và lan tỏa thông điệp ý nghĩa hơn mỗi ngày.
+            </p>
+
+            <p class="fade-up">
+                Mỗi sản phẩm trong dự án giống như một “mảnh ghép nhỏ”, phản chiếu một thực trạng, một góc nhìn hay một lời sẻ chia mà chúng mình muốn gửi gắm. Và hơn cả một dự án học tập, “Gánh&Gồng” còn là hành trình để chúng mình học cách quan sát nhiều hơn, lắng nghe nhiều hơn và đồng cảm nhiều hơn với những điều tưởng chừng rất bình thường trong cuộc sống.
+            </p>
+
+            <div class="image-container fade-up">
+                <img src="Ảnh.jpg" alt="Thành viên nhóm dự án Gánh&Gồng">
+                <div class="image-caption">Gánh&Gồng team</div>
             </div>
 
-             <p class="fade-up">
-                Một ngày của cô ấy bắt đầu từ trước khi mọi người thức giấc.
+            <p class="fade-up">
+                Bức ảnh này cũng chính là lời khép lại cho hành trình ấy - một hành trình của những ngày cùng nhau lên ý tưởng, chỉnh sửa từng chi tiết nhỏ, chạy deadline, tranh luận rồi lại cùng cười với nhau sau mỗi sản phẩm. Không chỉ lưu giữ hình ảnh của các thành viên trong nhóm, bức ảnh còn giữ lại cả những cảm xúc, những bài học và sự trưởng thành mà “Gánh&Gồng” đã mang đến cho chúng mình trong suốt quãng thời gian vừa qua.
             </p>
 
             <p class="fade-up">
-                Chuẩn bị bữa sáng, dọn dẹp nhà cửa, nhắc nhở từng việc nhỏ rồi vội vã đến công ty. Ở nơi làm việc, cô ấy phải hoàn thành deadline, chịu đựng những lời trách móc của cấp trên, cố gắng không để ai thấy sự mệt mỏi hiện trên gương mặt.
+                Và tại đây, dự án “Gánh&Gồng” cũng chính thức khép lại, nhưng những giá trị về sự sẻ chia, thấu hiểu và đồng hành mà dự án mong muốn lan tỏa sẽ vẫn còn ở lại. Chúng mình hy vọng rằng, sau hành trình này, sẽ có thêm nhiều người nhìn nhận rõ hơn những áp lực vô hình mà phụ nữ đang mang trên vai, để từ đó học cách quan tâm, sẻ chia và yêu thương nhiều hơn trong cuộc sống thường ngày.
             </p>
 
             <p class="fade-up">
-                Khi ngày làm việc của mọi người kết thúc, công việc của cô ấy vẫn chưa hết. Cô ấy trở về nhà với một danh sách trách nhiệm khác đang chờ sẵn: cơm nước, chăm sóc gia đình, lắng nghe, quan tâm và tiếp tục quán xuyến mọi thứ. Rồi lại bắt đầu một ngày mới. Không có thời gian nghỉ ngơi, không có khoảnh khắc nào dành cho bản thân.
+                Nhóm chúng mình xin chân thành cảm ơn tất cả mọi người đã cùng theo dõi, đồng hành và hơn cả là sự thấu cảm cho mỗi hành trình của dự án. Sự quan tâm và ủng hộ của mọi người chính là điều khiến hành trình này trở nên ý nghĩa và trọn vẹn hơn rất nhiều.
+            </p>
+
+            <p class="fade-up" style="font-weight: bold; color: var(--accent-color);">
+                Cuối cùng, chúng mình muốn gửi đến tất cả mọi người một thông điệp:
             </p>
 
             <p class="fade-up">
-                Đôi khi, điều khiến người phụ nữ mệt mỏi không chỉ là khối lượng công việc, mà còn là cảm giác mình phải luôn mạnh mẽ và chu toàn trong mọi vai trò. Vì vậy, chúng mình làm video này để truyền tải thông điệp đến cho mọi người, đặc biệt là nam giới: thay vì mặc định rằng phụ nữ “giỏi việc nước, đảm việc nhà” là điều hiển nhiên, hãy học cách san sẻ trách nhiệm và lắng nghe nhiều hơn. Một gia đình hạnh phúc không nên được xây dựng trên sự hy sinh thầm lặng của một ai cả mà cần sự thấu hiểu và đồng hành từ tất cả mọi người. Và chúng mình có lời khuyên dành cho những người phụ nữ đang phải đối mặt với tình trạng này: hãy nhớ nghỉ ngơi không phải là ích kỷ mà là yêu thương bản thân mình. Bạn không cần phải hoàn hảo để xứng đáng được yêu thương và trân trọng.
+                Phụ nữ giống như một khu vườn đầy những đóa hoa rực rỡ. Có người dịu dàng như cúc họa mi, có người mạnh mẽ như hướng dương luôn vươn mình về phía ánh sáng, cũng có những bông hồng tuy mềm mại nhưng vẫn kiêu hãnh và đầy bản lĩnh.
             </p>
 
-            <div class="fade-up" style="text-align: center; margin: 3rem 0;">
-                <a href="https://www.facebook.com/reel/1323159496413393" target="_blank" rel="noopener noreferrer" style="display: inline-block; color: var(--bg-color); background-color: var(--accent-color); padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: all 0.3s ease;">
+            <p class="fade-up">
+                Nhưng dù là loài hoa nào, họ cũng xứng đáng được nâng niu thay vì phải âm thầm gánh lấy mọi áp lực, hy sinh và bộn bề trong cuộc sống. Một xã hội đủ yêu thương không phải là nơi xem sự chịu đựng của phụ nữ là điều hiển nhiên, mà là nơi họ luôn được thấu hiểu, sẻ chia và có những người sẵn sàng đồng hành cùng họ qua những ngày nhiều mỏi mệt.
+            </p>
+
+            <div class="social-link-box fade-up">
+                <a href="https://www.facebook.com/profile.php?id=61567664427536" target="_blank" rel="noopener noreferrer">
                     Xem bài đăng gốc trên Facebook
                 </a>
             </div>
 
             <div class="byline fade-up">
-                Thực hiện bởi Anh Thư
+                Thực hiện bởi Gánh&Gồng team
             </div>
         </div>
     </div>

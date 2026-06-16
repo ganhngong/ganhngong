@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gánh&Gồng - “Đặc quyền” hay “Định kiến”?</title>
     
-    <!-- Tải D3.js, TopoJSON và Lucide Icons -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/topojson-client@3"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -372,7 +371,6 @@
                 Để thể hiện rõ sự khác biệt văn hóa nhưng đồng thời cũng cho thấy tính phổ quát của vấn đề, sản phẩm truyền thông sử dụng hình thức bản đồ tương tác (Interactive Map). Trên nền bản đồ thế giới, mỗi quốc gia hoặc khu vực sẽ được gắn với một “đặc quyền” cụ thể mà phụ nữ tại đó thường phải gánh vác. Ví dụ, ở một số nơi, phụ nữ được coi là “đặc quyền” khi hy sinh sự nghiệp để chăm sóc gia đình; ở nơi khác, họ có “đặc quyền” vừa làm việc toàn thời gian vừa đảm nhận toàn bộ công việc nội trợ. Việc tương tác trực tiếp bằng cách nhấn vào từng khu vực giúp người xem không chỉ quan sát, mà còn chủ động khám phá và nhận ra rằng những “đặc quyền” này thực chất là những áp lực mang tính hệ thống.
             </p>
 
-            <!-- KHU VỰC BẢN ĐỒ TƯƠNG TÁC -->
             <div id="map-container" class="fade-up">
                 <div id="loading-screen">
                     <i data-lucide="loader-2" class="loading-spinner"></i>
@@ -393,7 +391,6 @@
                     <i data-lucide="info" style="width: 12px; height: 12px;"></i> Sử dụng cuộn để phóng to • Kéo để di chuyển
                 </div>
 
-                <!-- Bảng thông tin khu vực (Region Card) -->
                 <div id="region-card">
                     <div class="card-header">
                         <div class="card-header-bg-solid"></div>
@@ -415,15 +412,13 @@
                         <p id="card-desc" style="font-size: 1.125rem; font-weight: 500; color: #6c292a; opacity: 0.8; line-height: 1.625; margin-bottom: 2rem;"></p>
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;" id="card-stats">
-                            <!-- JS sẽ điền thông số vào đây -->
-                        </div>
+                            </div>
 
                         <h3 style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 900; color: #6c292a; opacity: 0.6; margin-bottom: 1rem;">
                             <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i> Điểm nổi bật của khu vực
                         </h3>
                         <div id="card-details">
-                            <!-- JS sẽ điền chi tiết vào đây -->
-                        </div>
+                            </div>
                     </div>
 
                     <div class="card-footer">
@@ -433,8 +428,6 @@
                     </div>
                 </div>
             </div>
-            <!-- KẾT THÚC KHU VỰC BẢN ĐỒ -->
-
             <p class="fade-up">
                 Thông qua cách tiếp cận trực quan và có tính tương tác cao, bài truyền thông đặt ra một câu hỏi mang tính phản biện: liệu chúng ta đang trao quyền cho phụ nữ, hay đang gán thêm trách nhiệm dưới danh nghĩa trao quyền? Khi một nghĩa vụ được gọi là “đặc quyền”, nó không chỉ làm giảm đi tính chất áp lực của vấn đề, mà còn khiến những người trong cuộc khó có thể lên tiếng, bởi bất kỳ sự từ chối nào cũng có thể bị nhìn nhận là thiếu trách nhiệm hoặc không biết trân trọng.
 
@@ -452,6 +445,12 @@
                 Và có lẽ, bước đầu tiên để thay đổi chính là gọi đúng tên vấn đề.
             </p>
 
+            <div class="fade-up" style="text-align: center; margin: 3rem 0;">
+                <a href="https://www.facebook.com/photo?fbid=122099765306588814" target="_blank" rel="noopener noreferrer" style="display: inline-block; color: var(--bg-color); background-color: var(--accent-color); padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: all 0.3s ease;">
+                    Xem bài đăng gốc trên Facebook
+                </a>
+            </div>
+
             <div class="byline fade-up">
                 Thực hiện bởi Anh Thư, Trang Nhi, và Minh Châu
             </div>
@@ -462,7 +461,6 @@
         <p>Gánh&Gồng <br> Học viện Báo chí và Tuyên truyền</p>
     </footer>
 
-    <!-- LOGIC BẢN ĐỒ TƯƠNG TÁC -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Khởi tạo Icon
